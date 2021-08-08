@@ -1,11 +1,11 @@
-import World from "./World";
+import { useState } from "react";
 
 export default function Hello() {
-  let name = "Mike";
+  //let name = "Mike";
+  const [name, setName] = useState("Mike");
+
   function changeName() {
-    name = name === "Mike" ? "Jane" : "Mike";
-    console.log(name);
-    document.getElementById("name").innerText = name;
+    setName(name === "Mike" ? "Jane" : "Mike");
   }
   return (
     <div>
