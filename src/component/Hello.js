@@ -1,28 +1,17 @@
 import World from "./World";
 
 export default function Hello() {
-  function showName() {
-    console.log("Mikea");
+  let name = "Mike";
+  function changeName() {
+    name = name === "Mike" ? "Jane" : "Mike";
+    console.log(name);
+    document.getElementById("name").innerText = name;
   }
-  function showAge(age) {
-    console.log(age);
-  }
-  function showText(e) {
-    console.log(e.target.value);
-  }
-
   return (
     <div>
       <h1>Hello</h1>
-      <button onClick={showName}>show name</button>
-      <button
-        onClick={() => {
-          showAge(10);
-        }}
-      >
-        Show age
-      </button>
-      <input type="text" onChange={showText} />
+      <h1 id="name">{name}</h1>
+      <button onClick={changeName}>Change</button>
     </div>
   );
 }
