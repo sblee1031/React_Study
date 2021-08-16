@@ -2,11 +2,15 @@ import { useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
 import { Table } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
-export default function DebateList() {
+export default function DebateSearch() {
+  const { word } = useParams();
+  console.log("-->", { word });
   const [list, setList] = useState({});
   //const [status, setStatus] = useState();
-  const url = `http://localhost:9999/ta_back/debrecruit/`;
+  const url = `http://localhost:9999/ta_back/debrecruit/${word}`;
+  console.log("url : ", url);
   useEffect(() => {
     fetch(url, {
       method: "GET",
