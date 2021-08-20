@@ -2,11 +2,17 @@ import { useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
 import { Table } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import Paging from "./pagination/Paging";
 
 export default function DebateList() {
   const [list, setList] = useState({});
+  const [page, setPage] = useState(1);
+  const pageNo = page;
+  const pageSize = 5;
+
+  const count = 10;
   //const [status, setStatus] = useState();
-  const url = `http://localhost:9999/ta_back/debrecruit/`;
+  const url = `http://localhost:9999/ta_back/debrecruit/list?pageNo=${pageNo}&pageSize=${pageSize}`;
   useEffect(() => {
     fetch(url, {
       method: "GET",
@@ -15,8 +21,7 @@ export default function DebateList() {
         return res.json();
       })
       .then((data) => {
-        console.log("--->", data);
-
+        //console.log("--->", data);
         setList(data);
       });
   }, [url]);
@@ -52,7 +57,7 @@ export default function DebateList() {
             <tr key={debate.debate_no}>
               <td>{debate.debate_no}</td>
               <td>
-                <Link to={`/debrecruit/${debate.debate_no}`}>
+                <Link to={`/ta_front/debrecruit/${debate.debate_no}`}>
                   {debate.debate_topic}
                 </Link>
               </td>
@@ -64,10 +69,12 @@ export default function DebateList() {
           ))}
         </tbody>
       </Table>
-
-      <Button variant="success">
+      <div className="paging">
+        <Paging page={page} count={count} setPage={setPage} />
+      </div>
+      {/* <Button variant="success">
         status : {list.status ? list.status : "로딩"}
-      </Button>
+      </Button> */}
     </>
   );
 }

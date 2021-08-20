@@ -24,14 +24,42 @@ code {
 div.disDiscuss {
   width: 100%;
 }
-label {
-  font-size: 30px;
+
+.labelDiscuss {
+  display: inline-block;
+  font-size: 25px;
   font-weight: 600;
-  width: 30%;
+  width: 20%;
   margin-bottom: 20px;
-}
-label > input {
-  width: 100%;
-  font-size: 20px;
   text-align: center;
+}
+.vs {
+  margin: 10px;
+  font-size: 30pt;
+  font-weight: 600;
+  width: 10%;
+}
+div.debDate {
+  text-align: center;
+  margin: 20px;
+}
+.labelDebDate {
+  font-size: 20px;
+  font-weight: 600;
+  margin-right: 50px;
+}
+.react-datepicker-wrapper,
+#selectDebate_time {
+  margin: 10px;
+  max-width: 300px;
+}
+.ck.ck-editor {
+  overflow: hidden;
+}
+.ck-editor__editable {
+  overflow-y: hidden;
+  min-height: 600px;
+}
+.react-datepicker__header {
+  background-color: rgb(174, 235, 104) !important;
 }

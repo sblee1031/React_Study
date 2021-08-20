@@ -16,7 +16,12 @@ export default function Header() {
   };
   return (
     <div className="header" style={{ marginTop: "10px" }}>
-      <h1>토론 모집</h1>
+      <Link
+        style={{ textDecoration: "none", color: "black" }}
+        to={`/ta_front/debrecruit.html`}
+      >
+        <h1>토론 모집</h1>
+      </Link>
       <div
         style={{
           textAlign: "right",
@@ -24,11 +29,11 @@ export default function Header() {
           display: "block",
         }}
       >
-        <label style={{ fontSize: "15pt" }}>
+        <label style={{ fontSize: "15pt", fontWeight: "600" }}>
           검색
           <input
             className="word"
-            style={{ width: "300px", margin: "10px" }}
+            style={{ width: "300px", margin: "10px", fontSize: "14pt" }}
             placeholder="제목&내용을 입력해주세요."
             onChange={search}
           ></input>

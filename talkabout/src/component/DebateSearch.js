@@ -9,11 +9,16 @@ export default function DebateSearch() {
   console.log("-->", { word });
   const [list, setList] = useState({});
   //const [status, setStatus] = useState();
-  const url = `http://localhost:9999/ta_back/debrecruit/${word}`;
-  console.log("url : ", url);
+  const pageNo = 1;
+  const pageSize = 5;
+  const url = `http://localhost:9999/ta_back/debrecruit/list/${word}?start=${pageNo}&end=${pageSize}`;
+  //console.log("url : ", url);
   useEffect(() => {
     fetch(url, {
       method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
     })
       .then((res) => {
         return res.json();
@@ -56,7 +61,7 @@ export default function DebateSearch() {
             <tr key={debate.debate_no}>
               <td>{debate.debate_no}</td>
               <td>
-                <Link to={`/debrecruit/${debate.debate_no}`}>
+                <Link to={`/ta_front/debrecruit/${debate.debate_no}`}>
                   {debate.debate_topic}
                 </Link>
               </td>
@@ -68,10 +73,6 @@ export default function DebateSearch() {
           ))}
         </tbody>
       </Table>
-
-      <Button variant="success">
-        status : {list.status ? list.status : "로딩"}
-      </Button>
     </>
   );
 }
