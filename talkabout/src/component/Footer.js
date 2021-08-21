@@ -1,5 +1,4 @@
-import { Link, Redirect } from "react-router-dom";
-export default function Header() {
+export default function Footer() {
   //const redirect = window.location.replace("/");
   return (
     <div className="header" style={{ marginTop: "10px" }}>
@@ -7,7 +6,7 @@ export default function Header() {
         style={{ textDecoration: "none", color: "black" }}
         href={"/ta_front/debrecruit.html"}
       >
-        <h1>토론 모집</h1>
+        <h1>Footer</h1>
       </a>
     </div>
   );

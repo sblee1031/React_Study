@@ -2,9 +2,8 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import { Button } from "react-bootstrap";
+import { Button, Image } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import Datepick from "./Datepick";
 import "react-datepicker/dist/react-datepicker.css";
 
 export default function DebateView() {
@@ -17,6 +16,7 @@ export default function DebateView() {
   const [debDate, setDebDate] = useState(""); //ckeditor 객체
   const [debTime, setDebTime] = useState(""); //ckeditor 객체
   const [debWriter, setDebWriter] = useState(""); //ckeditor 객체
+  const [thumnail, setThumnail] = useState(""); //ckeditor 객체
   const { no } = useParams();
   const url = `http://localhost:9999/ta_back/debrecruit/${no}`;
   //console.log("url : ", url);
@@ -33,7 +33,7 @@ export default function DebateView() {
       .then((response) => {
         console.log("뷰-->", response);
         //setList(response);
-
+        setThumnail(response.debate.debate.debate_writer.member_thumb);
         setDebDate(response.debate.debate.debate_startDate);
         setDebWriter(response.debate.debate.debate_writer.member_nickName);
         setDebTime(response.debate.debate.debate_time);
@@ -43,25 +43,60 @@ export default function DebateView() {
         setContent(response.debate.debate.debate_content);
       });
   }, [url]);
+  const config = {
+    toolbar: {
+      items: [
+        "bold",
+        "italic",
+        "|",
+        "undo",
+        "redo",
+        "-",
+        "numberedList",
+        "bulletedList",
+      ],
 
+      viewportTopOffset: 30,
+
+      shouldNotGroupWhenFull: true,
+    },
+  };
   return (
     <>
-      <div className="writeView">
-        <div
-          className="writeInfo"
-          style={{ textAlign: "right", fontWeight: "800" }}
-        >
-          <label>작성자: {debWriter}</label>
-          <label style={{ margin: "0px 20px 0px 10px" }}>
-            작성시간 : {writeDate}
-          </label>
-        </div>
-
+      <div className="writeView" style={{ marginTop: "50px" }}>
         <div
           className="divDiscuss"
-          style={{ width: "100%", display: "inline-block", textAlign: "right" }}
+          style={{
+            width: "100%",
+            display: "inline",
+            textAlign: "center",
+          }}
         >
-          <label className="labelDiscuss">
+          <div
+            className="writeInfo"
+            style={{
+              display: "inline-block",
+              width: "25%",
+              textAlign: "left",
+              fontWeight: "800",
+            }}
+          >
+            <label>작성자: {debWriter}</label>
+            <Image
+              src={thumnail}
+              style={{ height: "50px", marginLeft: "20px" }}
+              alt={"썸네일"}
+              roundedCircle
+            />
+            {/* <img
+              src={thumnail}
+              style={{ height: "50px", marginLeft: "20px" }}
+              alt={"썸네일"}
+            ></img> */}
+
+            <label>작성시간 : {writeDate}</label>
+          </div>
+          <label className="labelDiscuss" style={{ width: "20%" }}>
             주장 1 <br />
             <input
               className="inputDiscuss1"
@@ -71,11 +106,11 @@ export default function DebateView() {
               readOnly
             ></input>
           </label>
-          <label className="vs" style={{ textAlign: "center" }}>
+          <label className="vs" style={{ textAlign: "center", width: "5%" }}>
             {" "}
             VS{" "}
           </label>
-          <label className="labelDiscuss">
+          <label className="labelDiscuss" style={{ width: "20%" }}>
             주장 2 <br />
             <input
               className="inputDiscuss2"
@@ -89,7 +124,7 @@ export default function DebateView() {
             className="debInfo"
             style={{
               display: "inline-block",
-              width: "30%",
+              width: "25%",
               margin: "0px 10px",
             }}
           >
@@ -113,15 +148,19 @@ export default function DebateView() {
             </label>
           </div>
         </div>
-        <div
-          className="divEditor"
-          style={{ minHeight: "630px", overflow: "auto" }}
-        >
+
+        <div className="divEditor" style={{ overflow: "auto" }}>
           <CKEditor
             editor={ClassicEditor}
             data={content}
+            config={{
+              toolbar: [],
+            }}
             onReady={(editor) => {
               editor.isReadOnly = true;
+              editor.config.set("toolbar", ["bold", "italic"]);
+
+              console.log(editor);
               setCkeditor(editor);
               //editor.isReadOnly = { readOnly };
               // You can store the "editor" and use when it is needed.
@@ -144,7 +183,7 @@ export default function DebateView() {
             style={{ margin: "10px" }}
             type="submit"
           >
-            작성하기
+            수정하기
           </Button>
           <Link to="/ta_front/debrecruit.html">
             <Button

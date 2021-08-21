@@ -1,7 +1,7 @@
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { Button } from "react-bootstrap";
-import { Link, Redirect, useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import React, { useState } from "react";
 import Datepick from "./Datepick";
 import "react-datepicker/dist/react-datepicker.css";
@@ -64,10 +64,10 @@ export default function DebWrite(props) {
   const changeEditor = (event, editor) => {
     const data = editor.getData();
     setEditData(data);
-    //onsole.log(ckeditor);
+    console.log(data);
     //console.log({ event, editor, data });
   };
-  function getCurrentDate(date) {
+  function getCurrentDate() {
     //현재시간 구하는 함수
     var date = new Date();
     var year = date.getFullYear().toString();
@@ -132,12 +132,13 @@ export default function DebWrite(props) {
               </select>
             </label>
           </div>
-          <div className="divDiscuss">
+          <div className="divDiscuss" style={{ width: "100%" }}>
             <label className="labelDiscuss">
               주장 1 <br />
               <input
                 className="inputDiscuss1"
                 name="discuss1"
+                style={{ width: "100%" }}
                 onChange={ocDiscuss1}
                 vlaue={discuss1}
               ></input>
@@ -148,6 +149,7 @@ export default function DebWrite(props) {
               <input
                 className="inputDiscuss2"
                 name="discuss2"
+                style={{ width: "100%" }}
                 onChange={ocDiscuss2}
                 vlaue={discuss2}
               ></input>
@@ -156,7 +158,28 @@ export default function DebWrite(props) {
           <div className="divEditor" style={{ maxHeight: "630px" }}>
             <CKEditor
               editor={ClassicEditor}
-              data="<p>내용을 입력해주세요!</p>"
+              data=""
+              config={{
+                toolbar: [
+                  "heading",
+                  "|",
+                  "bold",
+                  "italic",
+                  "link",
+                  "bulletedList",
+                  "numberedList",
+                  "|",
+                  "outdent",
+                  "indent",
+                  "|",
+                  "blockQuote",
+                  "insertTable",
+                  "mediaEmbed",
+                  "undo",
+                  "redo",
+                ],
+                placeholder: "내용을 입력해주세요",
+              }}
               onReady={(editor) => {
                 setCkeditor(editor);
                 //editor.isReadOnly = { readOnly };
@@ -172,7 +195,10 @@ export default function DebWrite(props) {
               // }}
             />
           </div>
-          <div className="divWriteButton" style={{ textAlign: "right" }}>
+          <div
+            className="divWriteButton"
+            style={{ textAlign: "right", display: "inline-block" }}
+          >
             <Button
               className="buttonWrite"
               variant="outline-success"

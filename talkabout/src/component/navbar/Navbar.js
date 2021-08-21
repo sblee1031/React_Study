@@ -1,14 +1,13 @@
-import { Link, Redirect } from "react-router-dom";
-export default function Header() {
+export default function Navbar() {
   //const redirect = window.location.replace("/");
   return (
-    <div className="header" style={{ marginTop: "10px" }}>
+    <nav className="navbar" style={{ marginTop: "10px" }}>
       <a
         style={{ textDecoration: "none", color: "black" }}
         href={"/ta_front/debrecruit.html"}
       >
-        <h1>토론 모집</h1>
+        <h1>nav</h1>
       </a>
-    </div>
+    </nav>
   );
 }

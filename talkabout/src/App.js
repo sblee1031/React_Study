@@ -7,18 +7,18 @@ import DebWrite from "./component/DebWrite";
 import DebateSearch from "./component/DebateSearch";
 import DebateView from "./component/DebateView";
 import { Container } from "react-bootstrap";
+import Footer from "./component/Footer";
+import Navbar from "./component/navbar/Navbar";
 function App() {
   return (
-    <Container>
-      <BrowserRouter>
-        <div className="App">
+    <BrowserRouter>
+      <div className="App">
+        <Container>
+          <Navbar />
           <Header />
           <Switch>
             <Route path="/ta_front/debrecruit.html">
               <DebateList />
-            </Route>
-            <Route path="/ta_front/debrecruit/search/:word">
-              <DebateSearch />
             </Route>
             <Route path="/ta_front/debrecruit/write">
               <DebWrite />
@@ -27,9 +27,10 @@ function App() {
               <DebateView />
             </Route>
           </Switch>
-        </div>
-      </BrowserRouter>
-    </Container>
+          <Footer />
+        </Container>
+      </div>
+    </BrowserRouter>
   );
 }
 

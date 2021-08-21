@@ -2,7 +2,7 @@ import { useState } from "react";
 import DatePicker from "react-datepicker";
 
 const Datepick = (props) => {
-  const [startDate, setStartDate] = useState(props.setDate);
+  const [startDate, setStartDate] = useState();
 
   const date = () => {
     setStartDate(props.setDate(date));

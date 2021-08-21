@@ -3,16 +3,46 @@ import { Button } from "react-bootstrap";
 import { Table } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import Paging from "./pagination/Paging";
+import { InputGroup, FormControl } from "react-bootstrap";
 
 export default function DebateList() {
   const [list, setList] = useState({});
   const [page, setPage] = useState(1);
-  const pageNo = page;
+  const [count, setCount] = useState(1);
   const pageSize = 5;
 
-  const count = 10;
-  //const [status, setStatus] = useState();
-  const url = `http://localhost:9999/ta_back/debrecruit/list?pageNo=${pageNo}&pageSize=${pageSize}`;
+  //const pageNo = page;
+  //console.log(pageNo);
+  const [word, setWord] = useState();
+  const [url, setUrl] = useState(
+    `http://localhost:9999/ta_back/debrecruit/list?pageNo=${page}&pageSize=${pageSize}`
+  );
+  const search = (e) => {
+    setWord(e.target.value);
+  };
+  const btnsearch = (e) => {
+    //const searchUrl = `http://localhost:9999/ta_back/debrecruit/list/${word}?pageNo=${page}&pageSize=${pageSize}`;
+    if (word) {
+      setPage1(1);
+      //setUrl(url);
+    } else {
+      e.preventDefault();
+      alert("검색어를 입력해주세요");
+    }
+  };
+  function setPage1(page) {
+    const listUrl = `http://localhost:9999/ta_back/debrecruit/list?pageNo=${page}&pageSize=${pageSize}`;
+    const searchUrl = `http://localhost:9999/ta_back/debrecruit/list/${word}?pageNo=${page}&pageSize=${pageSize}`;
+    // console.log(url);
+    // console.log(page);
+    if (word) {
+      setUrl(searchUrl);
+      setPage(page);
+    } else {
+      setUrl(listUrl);
+      setPage(page);
+    }
+  }
   useEffect(() => {
     fetch(url, {
       method: "GET",
@@ -21,15 +51,52 @@ export default function DebateList() {
         return res.json();
       })
       .then((data) => {
-        //console.log("--->", data);
+        // console.log("--->", data);
         setList(data);
+        setCount(data.lastRow);
       });
   }, [url]);
 
-  //console.log("---->", list);
-
   return (
     <>
+      <div
+        style={{
+          textAlign: "right",
+          marginRight: "10px",
+          display: "block",
+        }}
+      >
+        <label style={{ fontSize: "15pt", fontWeight: "600" }}>
+          <InputGroup className="mb-3">
+            <InputGroup.Text id="inputGroup-sizing-default">
+              검색
+            </InputGroup.Text>
+
+            <FormControl
+              aria-label="Default"
+              aria-describedby="inputGroup-sizing-default"
+              placeholder="제목&내용"
+              onChange={search}
+            />
+          </InputGroup>
+          {/* 검색
+          <input
+            className="word"
+            style={{ width: "300px", margin: "10px", fontSize: "14pt" }}
+            placeholder="제목&내용을 입력해주세요."
+            onChange={search}
+          ></input> */}
+        </label>
+
+        <Button
+          style={{ marginLeft: "10px" }}
+          className="buttons"
+          variant="success"
+          onClick={btnsearch}
+        >
+          검색
+        </Button>
+      </div>
       <div className="divButton" style={{ textAlign: "right", margin: "10px" }}>
         <Link
           className="write"
@@ -70,7 +137,7 @@ export default function DebateList() {
         </tbody>
       </Table>
       <div className="paging">
-        <Paging page={page} count={count} setPage={setPage} />
+        <Paging page={page} count={count} setPage={setPage1} />
       </div>
       {/* <Button variant="success">
         status : {list.status ? list.status : "로딩"}
