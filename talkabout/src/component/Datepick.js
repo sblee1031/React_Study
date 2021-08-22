@@ -36,9 +36,7 @@ const Datepick = (props) => {
       //minTime={setHours(setMinutes(new Date(), 0), 17)}
       dateFormat="yyyy/MM/dd/ h:mm aa"
     >
-      <div style={{ color: "green", fontSize: "15pt" }}>
-        토론 가능 시간 선택
-      </div>
+      <div style={{ color: "green", fontSize: "15pt" }}>토론 가능 시간</div>
     </DatePicker>
   );
 };

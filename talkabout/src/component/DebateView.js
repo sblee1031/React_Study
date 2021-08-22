@@ -158,9 +158,7 @@ export default function DebateView() {
             }}
             onReady={(editor) => {
               editor.isReadOnly = true;
-              editor.config.set("toolbar", ["bold", "italic"]);
 
-              console.log(editor);
               setCkeditor(editor);
               //editor.isReadOnly = { readOnly };
               // You can store the "editor" and use when it is needed.

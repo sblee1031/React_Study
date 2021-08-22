@@ -1,10 +1,12 @@
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import { Button } from "react-bootstrap";
+
+import { Button, Form, Alert } from "react-bootstrap";
 import { Link, useHistory } from "react-router-dom";
 import React, { useState } from "react";
 import Datepick from "./Datepick";
 import "react-datepicker/dist/react-datepicker.css";
+import AlertDismissible from "./AlertDismissible";
 
 export default function DebWrite(props) {
   const [discuss1, setDiscuss1] = useState("");
@@ -13,6 +15,7 @@ export default function DebWrite(props) {
   const [ckeditor, setCkeditor] = useState({}); //ckeditor 객체
   const [debateDate, setDebateDate] = useState("");
   const [debateTime, setDebateTime] = useState("30");
+  const [show, setShow] = useState(false);
   const history = useHistory();
   const ocDiscuss1 = (e) => {
     setDiscuss1(e.target.value);
@@ -31,7 +34,9 @@ export default function DebWrite(props) {
       discuss1 === "" ||
       discuss2 === ""
     ) {
-      alert("모두 입력해주세요");
+      // AlertDismissibleExample();
+      setShow(true);
+      // alert("모두 입력해주세요");
     } else {
       const Debate = {
         //debate_no: 1,
@@ -103,7 +108,16 @@ export default function DebWrite(props) {
     <>
       {/* https://www.youtube.com/watch?v=_-vCsD7jHh4 */}
       {/* <button onClick={click}>버튼</button> */}
-
+      <Alert show={show} variant="success">
+        <Alert.Heading>빈칸이 있습니다!</Alert.Heading>
+        <p>토론 일자, 주장, 내용을 확인해주세요^___^</p>
+        <hr />
+        <div className="d-flex justify-content-end">
+          <Button onClick={() => setShow(false)} variant="outline-success">
+            Close
+          </Button>
+        </div>
+      </Alert>
       <div className="writeView">
         <form onSubmit={debWrite}>
           <div className="debDate" style={{ fontSize: "10pt" }}>
@@ -120,7 +134,19 @@ export default function DebWrite(props) {
             <label className="labelDebDate">
               토론제한시간
               <br />
-              <select
+              <Form.Group controlId="exampleForm.SelectCustom">
+                <Form.Control
+                  as="select"
+                  onChange={ocDebateTime}
+                  value={debateTime}
+                  custom
+                >
+                  <option value="30">30분</option>
+                  <option value="60">60분</option>
+                  <option value="120">120분</option>
+                </Form.Control>
+              </Form.Group>
+              {/* <select
                 id="selectDebate_time"
                 name="selectDebate_time"
                 onChange={ocDebateTime}
@@ -129,7 +155,7 @@ export default function DebWrite(props) {
                 <option value="30">30분</option>
                 <option value="60">60분</option>
                 <option value="120">120분</option>
-              </select>
+              </select> */}
             </label>
           </div>
           <div className="divDiscuss" style={{ width: "100%" }}>
@@ -155,29 +181,50 @@ export default function DebWrite(props) {
               ></input>
             </label>
           </div>
-          <div className="divEditor" style={{ maxHeight: "630px" }}>
+          <div className="divEditor" style={{ minHeight: "00px" }}>
             <CKEditor
               editor={ClassicEditor}
               data=""
               config={{
-                toolbar: [
-                  "heading",
-                  "|",
-                  "bold",
-                  "italic",
-                  "link",
-                  "bulletedList",
-                  "numberedList",
-                  "|",
-                  "outdent",
-                  "indent",
-                  "|",
-                  "blockQuote",
-                  "insertTable",
-                  "mediaEmbed",
-                  "undo",
-                  "redo",
-                ],
+                toolbar: {
+                  items: [
+                    "heading",
+                    "|",
+
+                    "bold",
+                    "italic",
+
+                    "link",
+                    "bulletedList",
+                    "numberedList",
+                    "|",
+
+                    "blockQuote",
+                    "insertTable",
+                    "mediaEmbed",
+                    "undo",
+                    "redo",
+                  ],
+                },
+
+                // toolbar: [
+                //   "heading",
+                //   "|",
+                //   "bold",
+                //   "italic",
+                //   "link",
+                //   "bulletedList",
+                //   "numberedList",
+                //   "|",
+                //   "outdent",
+                //   "indent",
+                //   "|",
+                //   "blockQuote",
+                //   "insertTable",
+                //   "mediaEmbed",
+                //   "undo",
+                //   "redo",
+                // ],
                 placeholder: "내용을 입력해주세요",
               }}
               onReady={(editor) => {
