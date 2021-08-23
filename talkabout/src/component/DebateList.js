@@ -9,6 +9,8 @@ export default function DebateList() {
   const [list, setList] = useState({});
   const [page, setPage] = useState(1);
   const [count, setCount] = useState(1);
+  const [loginInfo, setLoginInfo] = useState();
+  const [writeButton, setwriteButton] = useState(false);
   const pageSize = 5;
 
   //const pageNo = page;
@@ -46,6 +48,7 @@ export default function DebateList() {
   useEffect(() => {
     fetch(url, {
       method: "GET",
+      credentials: "include",
     })
       .then((res) => {
         return res.json();
@@ -54,11 +57,38 @@ export default function DebateList() {
         // console.log("--->", data);
         setList(data);
         setCount(data.lastRow);
+        setLoginInfo(data.logininfo);
+        console.log("로그인정보->", loginInfo);
       });
   }, [url]);
+  function login() {
+    const mem = { member_social_no: "118153287897731040607" };
+    fetch("http://localhost:9999/ta_back/member/login", {
+      method: "POST",
+      // headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        member_social_no: "118153287897731040607",
+      }),
+      credentials: "include",
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        setLoginInfo(data.member);
+        console.log("--->", data);
+        // console.log("로그인완료", loginInfo);
+        if (loginInfo) {
+          setwriteButton(!writeButton);
+        } else {
+          setwriteButton(false);
+        }
+      });
+  }
 
   return (
     <>
+      <button onClick={login}>로긴</button>
       <div
         style={{
           textAlign: "right",
@@ -97,17 +127,22 @@ export default function DebateList() {
           검색
         </Button>
       </div>
-      <div className="divButton" style={{ textAlign: "right", margin: "10px" }}>
-        <Link
-          className="write"
-          style={{ textDecoration: "none", textDecorationColor: "black" }}
-          to={"/ta_front/debrecruit/write"}
+      {writeButton && (
+        <div
+          className="divButton"
+          style={{ textAlign: "right", margin: "10px" }}
         >
-          <Button className="buttons" variant="success">
-            토론 작성
-          </Button>
-        </Link>
-      </div>
+          <Link
+            className="write"
+            style={{ textDecoration: "none", textDecorationColor: "black" }}
+            to={"/ta_front/debrecruit/write"}
+          >
+            <Button className="buttons" variant="success">
+              토론 작성
+            </Button>
+          </Link>
+        </div>
+      )}
       <Table responsive="xl" hover>
         <thead>
           <tr style={{ fontSize: "14pt" }}>
