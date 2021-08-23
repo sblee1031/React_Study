@@ -54,23 +54,27 @@ export default function DebateList() {
         return res.json();
       })
       .then((data) => {
-        // console.log("--->", data);
+        console.log("--->", data);
         setList(data);
         setCount(data.lastRow);
         setLoginInfo(data.logininfo);
         console.log("로그인정보->", loginInfo);
       });
   }, [url]);
+
   function login() {
     const mem = { member_social_no: "118153287897731040607" };
-    fetch("http://localhost:9999/ta_back/member/login", {
-      method: "POST",
-      // headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        member_social_no: "118153287897731040607",
-      }),
-      credentials: "include",
-    })
+    fetch(
+      "http://localhost:9999/ta_back/member/login?socialNo=118153287897731040607",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          member_social_no: "118153287897731040607",
+        }),
+        credentials: "include",
+      }
+    )
       .then((res) => {
         return res.json();
       })
@@ -79,7 +83,7 @@ export default function DebateList() {
         console.log("--->", data);
         // console.log("로그인완료", loginInfo);
         if (loginInfo) {
-          setwriteButton(!writeButton);
+          setwriteButton(writeButton);
         } else {
           setwriteButton(false);
         }
@@ -127,7 +131,7 @@ export default function DebateList() {
           검색
         </Button>
       </div>
-      {writeButton && (
+      {loginInfo != "non-member" && (
         <div
           className="divButton"
           style={{ textAlign: "right", margin: "10px" }}
