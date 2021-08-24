@@ -17,6 +17,10 @@ export default function DebWrite(props) {
   const [debateTime, setDebateTime] = useState("30");
   const [show, setShow] = useState(false);
   const history = useHistory();
+
+  const [loginInfo, setLoginInfo] = useState();
+  const [writeButton, setwriteButton] = useState(false);
+
   const ocDiscuss1 = (e) => {
     setDiscuss1(e.target.value);
   };
@@ -56,6 +60,7 @@ export default function DebWrite(props) {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(Debate),
+        credentials: "include",
       })
         .then((res) => {
           return res.json();
@@ -64,6 +69,7 @@ export default function DebWrite(props) {
           console.log("결과->", data);
           history.push("/ta_front/debrecruit.html");
         });
+      console.log(Debate);
     }
   };
   const changeEditor = (event, editor) => {
@@ -100,12 +106,37 @@ export default function DebWrite(props) {
     setDebateTime(e.target.value);
     //console.log(debateTime);
   };
-  // function click() {
-  //   console.log(debateDate, "/", debateTime);
-  // }
+  function login() {
+    const mem = { member_social_no: "118153287897731040607" };
+    fetch(
+      "http://localhost:9999/ta_back/member/login?socialNo=118153287897731040607",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          member_social_no: "118153287897731040607",
+        }),
+        credentials: "include",
+      }
+    )
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        setLoginInfo(data.member);
+        console.log("--->", data);
+        // console.log("로그인완료", loginInfo);
+        if (loginInfo) {
+          setwriteButton(writeButton);
+        } else {
+          setwriteButton(false);
+        }
+      });
+  }
 
   return (
     <>
+      <button onClick={login}>로긴</button>
       {/* https://www.youtube.com/watch?v=_-vCsD7jHh4 */}
       {/* <button onClick={click}>버튼</button> */}
       <Alert show={show} variant="success">
@@ -161,24 +192,42 @@ export default function DebWrite(props) {
           <div className="divDiscuss" style={{ width: "100%" }}>
             <label className="labelDiscuss">
               주장 1 <br />
-              <input
+              <Form.Control
+                size="lg"
+                type="text"
                 className="inputDiscuss1"
                 name="discuss1"
                 style={{ width: "100%" }}
                 onChange={ocDiscuss1}
                 vlaue={discuss1}
-              ></input>
+              />
+              {/* <input
+                className="inputDiscuss1"
+                name="discuss1"
+                style={{ width: "100%" }}
+                onChange={ocDiscuss1}
+                vlaue={discuss1}
+              ></input> */}
             </label>
             <label className="vs"> VS </label>
             <label className="labelDiscuss">
               주장 2 <br />
-              <input
+              <Form.Control
+                size="lg"
+                type="text"
                 className="inputDiscuss2"
                 name="discuss2"
                 style={{ width: "100%" }}
                 onChange={ocDiscuss2}
                 vlaue={discuss2}
-              ></input>
+              />
+              {/* <input
+                className="inputDiscuss2"
+                name="discuss2"
+                style={{ width: "100%" }}
+                onChange={ocDiscuss2}
+                vlaue={discuss2}
+              ></input> */}
             </label>
           </div>
           <div className="divEditor" style={{ minHeight: "00px" }}>
