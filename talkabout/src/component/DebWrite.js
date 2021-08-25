@@ -3,14 +3,34 @@ import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
 import { Button, Form, Alert } from "react-bootstrap";
 import { Link, useHistory } from "react-router-dom";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Datepick from "./Datepick";
 import "react-datepicker/dist/react-datepicker.css";
 // import AlertDismissible from "./AlertDismissible";
 
 export default function DebWrite(props) {
+  const [buttonState, setButtonState] = useState(true);
+  const debate = props?.location?.state.debate;
+  const detail = props?.location?.state.detail;
+  useEffect(() => {
+    if (props?.location) {
+      //편집
+      setButtonState(false);
+      setDiscuss1(detail[0]?.discuss);
+      setDiscuss2(detail[1]?.discuss);
+      // discuss2 = detail[1]?.discuss;
+      console.log("편집", props?.location.state);
+
+      console.log("=>", detail[0]);
+      // console.log("DebWrite", props);
+      // console.log(new Date(debate.debate_startDate));
+    }
+  }, [props]);
   const [discuss1, setDiscuss1] = useState("");
   const [discuss2, setDiscuss2] = useState("");
+  // const editDiscuss1 = detail[0]?.discuss;
+  // const editDiscuss2 = detail[1]?.discuss;
+
   const [editData, setEditData] = useState("");
   // const [ckeditor, setCkeditor] = useState({}); //ckeditor 객체
   const [debateDate, setDebateDate] = useState("");
@@ -22,6 +42,7 @@ export default function DebWrite(props) {
   const [writeButton, setwriteButton] = useState(false);
 
   const ocDiscuss1 = (e) => {
+    //console.log(discuss1);
     setDiscuss1(e.target.value);
   };
   const ocDiscuss2 = (e) => {
@@ -154,13 +175,10 @@ export default function DebWrite(props) {
           <div className="debDate" style={{ fontSize: "10pt" }}>
             <label className="labelDebDate">
               토론일자
-              {/* <input
-                type="datetime-local"
-                id="inputDebate_date"
-                onChange={ocDebateDate}
-                value={debateDate}
-              /> */}
-              <Datepick setDate={ocDebateDate} />
+              <Datepick
+                setDate={ocDebateDate}
+                startDate={new Date(debate?.debate_startDate)}
+              />
             </label>
             <label className="labelDebDate">
               토론제한시간
@@ -169,7 +187,7 @@ export default function DebWrite(props) {
                 <Form.Control
                   as="select"
                   onChange={ocDebateTime}
-                  value={debateTime}
+                  value={debate?.debate_time || debateTime}
                   custom
                 >
                   <option value="30">30분</option>
@@ -199,7 +217,7 @@ export default function DebWrite(props) {
                 name="discuss1"
                 style={{ width: "100%" }}
                 onChange={ocDiscuss1}
-                vlaue={discuss1}
+                value={discuss1}
               />
               {/* <input
                 className="inputDiscuss1"
@@ -219,7 +237,7 @@ export default function DebWrite(props) {
                 name="discuss2"
                 style={{ width: "100%" }}
                 onChange={ocDiscuss2}
-                vlaue={discuss2}
+                value={discuss2}
               />
               {/* <input
                 className="inputDiscuss2"
@@ -233,7 +251,7 @@ export default function DebWrite(props) {
           <div className="divEditor" style={{ minHeight: "00px" }}>
             <CKEditor
               editor={ClassicEditor}
-              data=""
+              data={debate?.debate_content}
               config={{
                 toolbar: {
                   items: [
@@ -295,15 +313,27 @@ export default function DebWrite(props) {
             className="divWriteButton"
             style={{ textAlign: "right", display: "inline-block" }}
           >
-            <Button
-              className="buttonWrite"
-              variant="outline-success"
-              size="sm"
-              style={{ margin: "10px" }}
-              type="submit"
-            >
-              작성하기
-            </Button>
+            {buttonState ? (
+              <Button
+                className="buttonWrite"
+                variant="outline-success"
+                size="sm"
+                style={{ margin: "10px" }}
+                type="submit"
+              >
+                작성하기
+              </Button>
+            ) : (
+              <Button
+                className="buttonWrite"
+                variant="outline-success"
+                size="sm"
+                style={{ margin: "10px" }}
+                // onClick={debModify}
+              >
+                수정하기
+              </Button>
+            )}
             <Link to="/ta_front/debrecruit.html">
               <Button
                 className="buttonBack"

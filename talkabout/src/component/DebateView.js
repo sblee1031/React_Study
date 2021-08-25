@@ -5,10 +5,12 @@ import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { Button, Image } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import "react-datepicker/dist/react-datepicker.css";
+// import debWri
 
 export default function DebateView() {
   // const [list, setList] = useState({});
   // const [ckeditor, setCkeditor] = useState({}); //ckeditor 객체
+  // const [comp, setComp] = useState(DebWrite);
   const [debate, setDebate] = useState();
   const [detail, setDetail] = useState();
   const [discuss1, setDiscuss1] = useState(false);
@@ -30,7 +32,7 @@ export default function DebateView() {
   const [deleteButton, setdeleteButton] = useState(false);
 
   const [loading, setLoading] = useState(false);
-  const [loginInfo, setLoginInfo] = useState();
+  const [loginInfo, setLoginInfo] = useState({});
 
   const url = `http://localhost:9999/ta_back/debrecruit/${no}`;
   //console.log("url : ", url);
@@ -371,15 +373,22 @@ export default function DebateView() {
 
         <div className="divWriteButton" style={{ textAlign: "right" }}>
           {modifyButton && (
-            <Button
-              className="buttonWrite"
-              variant="outline-success"
-              size="sm"
-              style={{ margin: "10px" }}
-              onClick={debModify}
+            <Link
+              to={{
+                pathname: `/ta_front/debrecruit/modify`,
+                state: { debate: debate, detail: detail },
+              }}
             >
-              수정하기
-            </Button>
+              <Button
+                className="buttonWrite"
+                variant="outline-success"
+                size="sm"
+                style={{ margin: "10px" }}
+                // onClick={debModify}
+              >
+                수정하기
+              </Button>
+            </Link>
           )}
 
           {deleteButton && (

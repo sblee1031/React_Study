@@ -60,7 +60,7 @@ export default function DebateList() {
         setLoginInfo(data.logininfo);
         console.log("로그인정보->", loginInfo);
       });
-  }, [loginInfo?.member_no]);
+  }, [url]);
 
   function login() {
     // const mem = { member_social_no: "118153287897731040607" };

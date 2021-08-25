@@ -19,9 +19,16 @@ function App() {
             <Route path="/ta_front/debrecruit/write">
               <DebWrite />
             </Route>
+            <Route
+              path="/ta_front/debrecruit/modify"
+              component={DebWrite}
+            ></Route>
             <Route path="/ta_front/debrecruit/:no">
               <DebateView />
             </Route>
+
+            <Route component={DebateView} />
+            <Route component={DebWrite} />
           </Switch>
         </Container>
       </div>
