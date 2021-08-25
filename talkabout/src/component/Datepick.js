@@ -1,16 +1,26 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 
 const Datepick = (props) => {
   const [startDate, setStartDate] = useState();
 
-  const date = () => {
-    setStartDate(props.setDate(date));
-  };
+  useEffect(() => {
+    console.log(
+      "props.setPickerDate",
+      props.setPickerDate,
+      "startDate",
+      startDate
+    );
+    setStartDate(props.setPickerDate);
+  }, [props?.setPickerDate]);
+
   //console.log("선택일 : ", startDate);
   const ocDatePicker = (date) => {
+    console.log("date", date);
     setStartDate(date);
-    props.setDate(date);
+    props.selectedDate(date); //부모로 pops전송
+    // props.setDate(date);
+    // console.log("props.setDate(date)", props.setDate);
     // props.date = startDate;
   };
   const filterPassedTime = (time) => {

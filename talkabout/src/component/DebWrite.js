@@ -12,18 +12,41 @@ export default function DebWrite(props) {
   const [buttonState, setButtonState] = useState(true);
   const debate = props?.location?.state.debate;
   const detail = props?.location?.state.detail;
+  const [debateTime, setDebateTime] = useState("30");
+  const [debateDate, setDebateDate] = useState();
+  const [pickerDate, setPickerDate] = useState();
+  const ocDebateDate = (e) => {
+    //시작날짜 설정
+    //  console.log(getCurrentDate(e));
+    //const year = e.getYears
+    //setDebateDate(getCurrentDate(e));
+    // console.log("debateDate", debateDate);
+    console.log("pickerDate", pickerDate);
+  };
+  const getPickerDate = (date) => {
+    setDebateDate(getCurrentDate(date));
+    console.log(
+      "getPickerDate",
+      date,
+      getCurrentDate(date),
+      "=>",
+      new Date(getCurrentDate(date))
+    );
+  };
+
   useEffect(() => {
     if (props?.location) {
       //편집
+      setPickerDate(new Date(debate.debate_startDate));
       setButtonState(false);
       setDiscuss1(detail[0]?.discuss);
       setDiscuss2(detail[1]?.discuss);
+      setDebateTime(debate?.debate_time);
+      console.log("setDebateDate", new Date(debate?.debate_startDate));
+      setDebateDate(new Date(debate?.debate_startDate));
       // discuss2 = detail[1]?.discuss;
       console.log("편집", props?.location.state);
-
       console.log("=>", detail[0]);
-      // console.log("DebWrite", props);
-      // console.log(new Date(debate.debate_startDate));
     }
   }, [props]);
   const [discuss1, setDiscuss1] = useState("");
@@ -33,8 +56,7 @@ export default function DebWrite(props) {
 
   const [editData, setEditData] = useState("");
   // const [ckeditor, setCkeditor] = useState({}); //ckeditor 객체
-  const [debateDate, setDebateDate] = useState("");
-  const [debateTime, setDebateTime] = useState("30");
+
   const [show, setShow] = useState(false);
   const history = useHistory();
 
@@ -87,8 +109,12 @@ export default function DebWrite(props) {
           return res.json();
         })
         .then((data) => {
-          console.log("결과->", data);
-          history.push("/ta_front/debrecruit.html");
+          if (data.status == 1) {
+            console.log("결과->", data);
+            history.push("/ta_front/debrecruit.html");
+          } else if (data.status == 0) {
+            alert("작성실패");
+          }
         });
       console.log(Debate);
     }
@@ -99,9 +125,9 @@ export default function DebWrite(props) {
     console.log(data);
     //console.log({ event, editor, data });
   };
-  function getCurrentDate() {
+  function getCurrentDate(e) {
     //현재시간 구하는 함수
-    var date = new Date();
+    var date = new Date(e);
     var year = date.getFullYear().toString();
     var month = date.getMonth() + 1;
     month = month < 10 ? "0" + month.toString() : month.toString();
@@ -117,15 +143,11 @@ export default function DebWrite(props) {
 
     return year + "-" + month + "-" + day + " " + hour + ":" + minites + ":00"; // 현재시간보다 1시간 추가 ,최소 시작시간은 한시간 뒤부터 가능.
   }
-  const ocDebateDate = (e) => {
-    //  console.log(getCurrentDate(e));
-    //const year = e.getYears
-    setDebateDate(getCurrentDate(e));
-    // console.log(debateDate);
-  };
+  const setDate = () => {};
   const ocDebateTime = (e) => {
+    //토론제한시간 설정..
     setDebateTime(e.target.value);
-    //console.log(debateTime);
+    // console.log("e.target", e.target.value);
   };
   function login() {
     // const mem = { member_social_no: "118153287897731040607" };
@@ -163,7 +185,6 @@ export default function DebWrite(props) {
       <Alert show={show} variant="success">
         <Alert.Heading>빈칸이 있습니다!</Alert.Heading>
         <p>토론 일자, 주장, 내용을 확인해주세요^___^</p>
-        <hr />
         <div className="d-flex justify-content-end">
           <Button onClick={() => setShow(false)} variant="outline-success">
             Close
@@ -176,8 +197,11 @@ export default function DebWrite(props) {
             <label className="labelDebDate">
               토론일자
               <Datepick
-                setDate={ocDebateDate}
-                startDate={new Date(debate?.debate_startDate)}
+                setPickerDate={pickerDate}
+                // onChange={setDate1}
+                // setDate={ocDebateDate}
+                // startDate={debateDate}
+                selectedDate={getPickerDate}
               />
             </label>
             <label className="labelDebDate">
@@ -187,7 +211,7 @@ export default function DebWrite(props) {
                 <Form.Control
                   as="select"
                   onChange={ocDebateTime}
-                  value={debate?.debate_time || debateTime}
+                  value={debateTime}
                   custom
                 >
                   <option value="30">30분</option>

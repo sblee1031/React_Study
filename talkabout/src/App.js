@@ -26,9 +26,6 @@ function App() {
             <Route path="/ta_front/debrecruit/:no">
               <DebateView />
             </Route>
-
-            <Route component={DebateView} />
-            <Route component={DebWrite} />
           </Switch>
         </Container>
       </div>

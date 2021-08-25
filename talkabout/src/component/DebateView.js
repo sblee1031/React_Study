@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
@@ -30,7 +30,7 @@ export default function DebateView() {
   const [outButton2, setOutButton2] = useState(false);
   const [modifyButton, setModifyButton] = useState(false);
   const [deleteButton, setdeleteButton] = useState(false);
-
+  const history = useHistory();
   const [loading, setLoading] = useState(false);
   const [loginInfo, setLoginInfo] = useState({});
 
@@ -205,12 +205,33 @@ export default function DebateView() {
 
   const debDelete = () => {
     console.log("삭제");
+    const url = "http://localhost:9999/ta_back/debrecruit/delete";
+    fetch(url, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ debNo: `${no}` }),
+      credentials: "include",
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((response) => {
+        if (response.status == 1) {
+          alert("삭제완료");
+          history.push("/ta_front/debrecruit.html");
+        } else {
+          alert("삭제실패", response.error);
+        }
+      });
   };
-  const debModify = () => {
-    console.log("수정");
-  };
+  // const debModify = () => {
+  //   console.log("수정");
+  // };
 
   function login() {
+    console.log(history);
     const social = "37612893746";
     fetch("http://localhost:9999/ta_back/member/login?socialNo=" + social, {
       method: "POST",
