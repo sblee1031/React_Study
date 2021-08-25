@@ -9,6 +9,8 @@ import "react-datepicker/dist/react-datepicker.css";
 export default function DebateView() {
   // const [list, setList] = useState({});
   const [ckeditor, setCkeditor] = useState({}); //ckeditor 객체
+  const [debate, setDebate] = useState();
+  const [detail, setDetail] = useState();
   const [discuss1, setDiscuss1] = useState(false);
   const [discuss2, setDiscuss2] = useState(false);
   const [content, setContent] = useState("");
@@ -18,13 +20,17 @@ export default function DebateView() {
   const [debWriter, setDebWriter] = useState("");
   const [thumnail, setThumnail] = useState("");
   const { no } = useParams();
-  const [discussor1, setDiscussor1] = useState(false);
-  const [discussor2, setDiscussor2] = useState(false);
-  const [isButton1, setCombutton1] = useState(false);
-  const [isButton2, setCombutton2] = useState(false);
+  const [discussor1, setDiscussor1] = useState();
+  const [discussor2, setDiscussor2] = useState();
+  const [inButton1, setInButton1] = useState(false);
+  const [outButton1, setOutButton1] = useState(false);
+  const [inButton2, setInButton2] = useState(false);
+  const [outButton2, setOutButton2] = useState(false);
+  const [modifyButton, setModifyButton] = useState(false);
+  const [deleteButton, setdeleteButton] = useState(false);
+
   const [loading, setLoading] = useState(false);
-  const [loginInfo, setLoginInfo] = useState(false);
-  const [writeButton, setwriteButton] = useState(false);
+  const [loginInfo, setLoginInfo] = useState();
 
   const url = `http://localhost:9999/ta_back/debrecruit/${no}`;
   //console.log("url : ", url);
@@ -44,6 +50,8 @@ export default function DebateView() {
         .then((response) => {
           console.log("뷰-->", response);
           //setList(response);
+          setDebate(response.debate.debate);
+          setDetail(response.debate.detail);
           setThumnail(response.debate.debate.debate_writer.member_thumb);
           setDebDate(response.debate.debate.debate_startDate);
           setDebWriter(response.debate.debate.debate_writer.member_nickName);
@@ -52,28 +60,149 @@ export default function DebateView() {
           setDiscuss1(response.debate.detail[0].discuss);
           setDiscuss2(response.debate.detail[1].discuss);
           setContent(response.debate.debate.debate_content);
-          setLoginInfo(
-            response.logininfo !== "non-member" && response.logininfo
-          );
-          setDiscussor1(
-            response.debate.detail[0].discussor &&
-              response.debate.detail[0].discussor.member_no
-          );
-          setDiscussor2(
-            response.debate.detail[1].discussor &&
-              response.debate.detail[1].discussor.member_no
-          );
+          setLoginInfo(response.logininfo);
+          setDiscussor1(response.debate.detail[0]?.discussor);
+          setDiscussor2(response.debate.detail[1]?.discussor);
           setLoading(false);
         });
     };
+
+    if (loginInfo && debate && detail) {
+      //console.log("==>", loginInfo);
+      // console.log(
+      //   "**dis1=>",
+      //   discussor1,
+      //   "dis2=>",
+      //   discussor2,
+      //   "logininfo=>",
+      //   loginInfo,
+      //   "debate",
+      //   debate,
+      //   "detail",
+      //   detail
+      // );
+      if (debate?.debate_status !== "모집중") {
+        // console.log("모집중 아님", debate?.debate_status);
+        setModifyButton(false);
+        setdeleteButton(false);
+        setOutButton1(false);
+        setOutButton1(false);
+        setInButton1(false);
+        setInButton1(false);
+      } else {
+        console.log("모집중");
+        if (
+          //수정 삭제 버튼 시작
+          loginInfo != "non-member" &&
+          debWriter == loginInfo?.member_nickName
+        ) {
+          setModifyButton(true);
+          setdeleteButton(true);
+        } else {
+          setModifyButton(false);
+          setdeleteButton(false);
+        } //수정 삭제 버튼 끝
+        //
+        //참여버튼 시작
+        if (detail[0].discussor == null) {
+          // console.log("discussor1", discussor1);
+          setInButton1(true);
+          // setInButton2(true);
+          if (
+            loginInfo != "non-member" &&
+            detail[1].discussor?.member_no != loginInfo?.member_no
+          ) {
+            // console.log(
+            //   "discussor2?.member_no != loginInfo?.member_no",
+            //   discussor2?.member_no
+            // );
+            setInButton1(true);
+          }
+        } else if (
+          loginInfo != "non-member" &&
+          detail[0].discussor?.member_no == loginInfo?.member_no
+        ) {
+          // console.log(
+          //   "discussor1?.member_no == loginInfo?.member_no",
+          //   discussor1
+          // );
+          setOutButton1(true);
+          setInButton1(false);
+          setInButton2(false);
+        } else {
+          // console.log(
+          //   "else discussor1",
+          //   "**dis1=>",
+          //   discussor1,
+          //   "dis2=>",
+          //   discussor2,
+          //   "logininfo=>",
+          //   loginInfo,
+          //   "debate",
+          //   debate,
+          //   "detail",
+          //   detail
+          // );
+          setInButton1(false);
+        }
+        if (detail[1].discussor == null) {
+          // console.log("discussor2", discussor2);
+          // setInButton1(true);
+          setInButton2(true);
+          if (
+            loginInfo != "non-member" &&
+            detail[0].discussor?.member_no != loginInfo?.member_no
+          ) {
+            // console.log(
+            //   "discussor1?.member_no != loginInfo?.member_no",
+            //   discussor1
+            // );
+            setInButton2(true);
+          }
+        } else if (
+          loginInfo != "non-member" &&
+          detail[1].discussor?.member_no == loginInfo?.member_no
+        ) {
+          // console.log(
+          //   "discussor2?.member_no == loginInfo?.member_no",
+          //   discussor1
+          // );
+          setOutButton2(true);
+          setInButton1(false);
+          setInButton2(false);
+        } else {
+          // console.log(
+          //   "else discussor2",
+          //   "**dis1=>",
+          //   discussor1,
+          //   "dis2=>",
+          //   discussor2,
+          //   "logininfo=>",
+          //   loginInfo,
+          //   "debate",
+          //   debate,
+          //   "detail",
+          //   detail
+          // );
+          setInButton2(false);
+        }
+        // console.log(
+        //   "END dis1=>",
+        //   discussor1,
+        //   "dis2=>",
+        //   discussor2,
+        //   "logininfo=>",
+        //   loginInfo
+        // );
+      }
+    } else {
+      // console.log("else logininfo", loginInfo);
+    }
     fetchData();
-    console.log("logininfo->", loginInfo);
-    console.log("discussor1->", discussor1);
-    console.log("discussor2->", discussor2);
-  }, [url]);
+  }, [loginInfo?.member_no]);
 
   function login() {
-    const social = "118153287897731040607";
+    const social = "37612893746";
     fetch("http://localhost:9999/ta_back/member/login?socialNo=" + social, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -87,43 +216,17 @@ export default function DebateView() {
       })
       .then((data) => {
         setLoginInfo(data.member);
-        console.log("로그인--->", data);
+        // console.log("로그인--->", data);
         // console.log("로그인완료", loginInfo);
-        if (loginInfo) {
-          setwriteButton(writeButton);
-        } else {
-          setwriteButton(false);
-        }
       });
-
-    if (discussor1 == "") {
-      console.log("1", discussor1);
-      setCombutton1(false);
-    } else {
-      console.log("2", discussor1);
-      setCombutton1(true);
-    }
-    if (discussor2 == "") {
-      console.log("3", discussor2, loginInfo);
-      setCombutton2(false);
-    } else {
-      console.log("4", discussor2);
-      setCombutton2(true);
-    }
   }
 
   return (
     <>
-      로그인 번호 : {loginInfo.member_no}
+      로그인 번호 : {loginInfo?.member_no} / {loginInfo?.member_nickName}
       {loading ? <div>Loading...</div> : <div>Loading끝</div>}
       <button onClick={login}>로긴</button>
-      <button
-        onClick={() => {
-          setCombutton1(!isButton1);
-        }}
-      >
-        로긴
-      </button>
+      {/* <button onClick={logo}>버튼</button> */}
       <div className="writeView" style={{ marginTop: "50px" }}>
         <div
           className="divDiscuss"
@@ -149,17 +252,11 @@ export default function DebateView() {
               alt={"썸네일"}
               roundedCircle
             />
-            {/* <img
-              src={thumnail}
-              style={{ height: "50px", marginLeft: "20px" }}
-              alt={"썸네일"}
-            ></img> */}
 
             <label>작성시간 : {writeDate}</label>
           </div>
           <label className="labelDiscuss" style={{ width: "20%" }}>
             주장 1 <br />
-            {discussor1}
             <input
               className="inputDiscuss1"
               name="discuss1"
@@ -167,18 +264,21 @@ export default function DebateView() {
               style={{ textAlign: "center", width: "100%" }}
               readOnly
             ></input>
-            {isButton1 && <Button>111</Button>}
-            {loading && loginInfo.member_no ? (
-              discussor1 === loginInfo.member_no ? (
-                <Button>참여취소</Button>
-              ) : (
-                isButton1 && <Button>토론자1 참여</Button>
-              )
+            {discussor1?.member_nickName ? (
+              <p style={{ marginTop: "10px", fontSize: "17pt" }}>
+                토론자 : {discussor1?.member_nickName}
+                <Image
+                  src={discussor1?.member_thumb}
+                  style={{ height: "30px", marginLeft: "10px" }}
+                  alt={"썸네일"}
+                  roundedCircle
+                />
+              </p>
             ) : (
               ""
             )}
-            {/* {discussor1 ? "" : <Button>토론자1 참여</Button>}
-            {discussor1 == loginInfo.member_no ? <Button>참여취소</Button> : ""} */}
+            {outButton1 && <Button>참여취소</Button>}
+            {inButton1 && <Button>토론자1 참여</Button>}
           </label>
           <label className="vs" style={{ textAlign: "center", width: "10%" }}>
             {" "}
@@ -186,7 +286,6 @@ export default function DebateView() {
           </label>
           <label className="labelDiscuss" style={{ width: "20%" }}>
             주장 2 <br />
-            {discussor2}
             <input
               className="inputDiscuss2"
               name="discuss2"
@@ -194,17 +293,21 @@ export default function DebateView() {
               style={{ textAlign: "center", width: "100%" }}
               readOnly
             ></input>
-            {loading && loginInfo.member_no ? (
-              discussor2 === loginInfo.member_no ? (
-                <Button>참여취소</Button>
-              ) : (
-                isButton2 && <Button>토론자2 참여</Button>
-              )
+            {discussor2?.member_nickName ? (
+              <p style={{ marginTop: "10px", fontSize: "17pt" }}>
+                토론자 : {discussor2?.member_nickName}
+                <Image
+                  src={discussor2?.member_thumb}
+                  style={{ height: "30px", marginLeft: "10px" }}
+                  alt={"썸네일"}
+                  roundedCircle
+                />
+              </p>
             ) : (
               ""
             )}
-            {/* {discussor2 ? "" : <Button>토론자 참여</Button>}
-            {discussor2 == loginInfo.member_no ? <Button>참여취소</Button> : ""} */}
+            {outButton2 && <Button>참여취소</Button>}
+            {inButton2 && <Button>토론자2 참여</Button>}
           </label>
           <div
             className="debInfo"
@@ -234,7 +337,6 @@ export default function DebateView() {
             </label>
           </div>
         </div>
-
         <div className="divEditor" style={{ overflow: "auto" }}>
           <CKEditor
             editor={ClassicEditor}
@@ -259,18 +361,35 @@ export default function DebateView() {
             // }}
           />
         </div>
+
         <div className="divWriteButton" style={{ textAlign: "right" }}>
-          <Link to="/ta_front/debrecruit.html">
-            <Button
-              className="buttonWrite"
-              variant="outline-success"
-              size="sm"
-              style={{ margin: "10px" }}
-              type="submit"
-            >
-              수정하기
-            </Button>
-          </Link>
+          {modifyButton && (
+            <Link to="/ta_front/debrecruit.html">
+              <Button
+                className="buttonWrite"
+                variant="outline-success"
+                size="sm"
+                style={{ margin: "10px" }}
+                type="submit"
+              >
+                수정하기
+              </Button>
+            </Link>
+          )}
+
+          {deleteButton && (
+            <Link to="/ta_front/debrecruit.html">
+              <Button
+                className="buttonWrite"
+                variant="outline-success"
+                size="sm"
+                style={{ margin: "10px" }}
+                type="submit"
+              >
+                삭제하기
+              </Button>
+            </Link>
+          )}
           <Link to="/ta_front/debrecruit.html">
             <Button
               className="buttonBack"
