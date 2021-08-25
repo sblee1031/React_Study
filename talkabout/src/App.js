@@ -5,8 +5,7 @@ import DebateList from "./component/DebateList";
 import DebWrite from "./component/DebWrite";
 import DebateView from "./component/DebateView";
 import { Container } from "react-bootstrap";
-import Footer from "./component/Footer";
-import Navbar from "./component/navbar/Navbar";
+
 function App() {
   return (
     <BrowserRouter>

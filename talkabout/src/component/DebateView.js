@@ -8,7 +8,7 @@ import "react-datepicker/dist/react-datepicker.css";
 
 export default function DebateView() {
   // const [list, setList] = useState({});
-  const [ckeditor, setCkeditor] = useState({}); //ckeditor 객체
+  // const [ckeditor, setCkeditor] = useState({}); //ckeditor 객체
   const [debate, setDebate] = useState();
   const [detail, setDetail] = useState();
   const [discuss1, setDiscuss1] = useState(false);
@@ -93,8 +93,8 @@ export default function DebateView() {
         console.log("모집중");
         if (
           //수정 삭제 버튼 시작
-          loginInfo != "non-member" &&
-          debWriter == loginInfo?.member_nickName
+          loginInfo !== "non-member" &&
+          debWriter === loginInfo?.member_nickName
         ) {
           setModifyButton(true);
           setdeleteButton(true);
@@ -104,13 +104,13 @@ export default function DebateView() {
         } //수정 삭제 버튼 끝
         //
         //참여버튼 시작
-        if (detail[0].discussor == null) {
+        if (detail[0].discussor === null) {
           // console.log("discussor1", discussor1);
           setInButton1(true);
           // setInButton2(true);
           if (
-            loginInfo != "non-member" &&
-            detail[1].discussor?.member_no != loginInfo?.member_no
+            loginInfo !== "non-member" &&
+            detail[1].discussor?.member_no !== loginInfo?.member_no
           ) {
             // console.log(
             //   "discussor2?.member_no != loginInfo?.member_no",
@@ -119,8 +119,8 @@ export default function DebateView() {
             setInButton1(true);
           }
         } else if (
-          loginInfo != "non-member" &&
-          detail[0].discussor?.member_no == loginInfo?.member_no
+          loginInfo !== "non-member" &&
+          detail[0].discussor?.member_no === loginInfo?.member_no
         ) {
           // console.log(
           //   "discussor1?.member_no == loginInfo?.member_no",
@@ -145,13 +145,13 @@ export default function DebateView() {
           // );
           setInButton1(false);
         }
-        if (detail[1].discussor == null) {
+        if (detail[1].discussor === null) {
           // console.log("discussor2", discussor2);
           // setInButton1(true);
           setInButton2(true);
           if (
-            loginInfo != "non-member" &&
-            detail[0].discussor?.member_no != loginInfo?.member_no
+            loginInfo !== "non-member" &&
+            detail[0].discussor?.member_no !== loginInfo?.member_no
           ) {
             // console.log(
             //   "discussor1?.member_no != loginInfo?.member_no",
@@ -160,8 +160,8 @@ export default function DebateView() {
             setInButton2(true);
           }
         } else if (
-          loginInfo != "non-member" &&
-          detail[1].discussor?.member_no == loginInfo?.member_no
+          loginInfo !== "non-member" &&
+          detail[1].discussor?.member_no === loginInfo?.member_no
         ) {
           // console.log(
           //   "discussor2?.member_no == loginInfo?.member_no",
@@ -200,6 +200,13 @@ export default function DebateView() {
     }
     fetchData();
   }, [loginInfo?.member_no]);
+
+  const debDelete = () => {
+    console.log("삭제");
+  };
+  const debModify = () => {
+    console.log("수정");
+  };
 
   function login() {
     const social = "37612893746";
@@ -347,7 +354,7 @@ export default function DebateView() {
             onReady={(editor) => {
               editor.isReadOnly = true;
 
-              setCkeditor(editor);
+              //setCkeditor(editor);
               //editor.isReadOnly = { readOnly };
               // You can store the "editor" and use when it is needed.
               //console.log("Editor is ready to use!", editor);
@@ -364,31 +371,27 @@ export default function DebateView() {
 
         <div className="divWriteButton" style={{ textAlign: "right" }}>
           {modifyButton && (
-            <Link to="/ta_front/debrecruit.html">
-              <Button
-                className="buttonWrite"
-                variant="outline-success"
-                size="sm"
-                style={{ margin: "10px" }}
-                type="submit"
-              >
-                수정하기
-              </Button>
-            </Link>
+            <Button
+              className="buttonWrite"
+              variant="outline-success"
+              size="sm"
+              style={{ margin: "10px" }}
+              onClick={debModify}
+            >
+              수정하기
+            </Button>
           )}
 
           {deleteButton && (
-            <Link to="/ta_front/debrecruit.html">
-              <Button
-                className="buttonWrite"
-                variant="outline-success"
-                size="sm"
-                style={{ margin: "10px" }}
-                type="submit"
-              >
-                삭제하기
-              </Button>
-            </Link>
+            <Button
+              className="buttonWrite"
+              variant="outline-success"
+              size="sm"
+              style={{ margin: "10px" }}
+              onClick={debDelete}
+            >
+              삭제하기
+            </Button>
           )}
           <Link to="/ta_front/debrecruit.html">
             <Button

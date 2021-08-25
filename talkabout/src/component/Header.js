@@ -1,4 +1,3 @@
-import { Link, Redirect } from "react-router-dom";
 export default function Header() {
   //const redirect = window.location.replace("/");
   return (

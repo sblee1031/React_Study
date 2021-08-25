@@ -6,13 +6,13 @@ import { Link, useHistory } from "react-router-dom";
 import React, { useState } from "react";
 import Datepick from "./Datepick";
 import "react-datepicker/dist/react-datepicker.css";
-import AlertDismissible from "./AlertDismissible";
+// import AlertDismissible from "./AlertDismissible";
 
 export default function DebWrite(props) {
   const [discuss1, setDiscuss1] = useState("");
   const [discuss2, setDiscuss2] = useState("");
   const [editData, setEditData] = useState("");
-  const [ckeditor, setCkeditor] = useState({}); //ckeditor 객체
+  // const [ckeditor, setCkeditor] = useState({}); //ckeditor 객체
   const [debateDate, setDebateDate] = useState("");
   const [debateTime, setDebateTime] = useState("30");
   const [show, setShow] = useState(false);
@@ -107,7 +107,7 @@ export default function DebWrite(props) {
     //console.log(debateTime);
   };
   function login() {
-    const mem = { member_social_no: "118153287897731040607" };
+    // const mem = { member_social_no: "118153287897731040607" };
     fetch(
       "http://localhost:9999/ta_back/member/login?socialNo=118153287897731040607",
       {
@@ -277,7 +277,7 @@ export default function DebWrite(props) {
                 placeholder: "내용을 입력해주세요",
               }}
               onReady={(editor) => {
-                setCkeditor(editor);
+                //setCkeditor(editor);
                 //editor.isReadOnly = { readOnly };
                 // You can store the "editor" and use when it is needed.
                 //console.log("Editor is ready to use!", editor);

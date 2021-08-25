@@ -60,10 +60,10 @@ export default function DebateList() {
         setLoginInfo(data.logininfo);
         console.log("로그인정보->", loginInfo);
       });
-  }, [url]);
+  }, [loginInfo?.member_no]);
 
   function login() {
-    const mem = { member_social_no: "118153287897731040607" };
+    // const mem = { member_social_no: "118153287897731040607" };
     fetch(
       "http://localhost:9999/ta_back/member/login?socialNo=118153287897731040607",
       {
@@ -131,7 +131,7 @@ export default function DebateList() {
           검색
         </Button>
       </div>
-      {loginInfo != "non-member" && (
+      {loginInfo !== "non-member" && (
         <div
           className="divButton"
           style={{ textAlign: "right", margin: "10px" }}
