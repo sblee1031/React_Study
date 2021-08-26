@@ -119,6 +119,56 @@ export default function DebWrite(props) {
       console.log(Debate);
     }
   };
+  const debModify = (e) => {
+    //토론 수정
+    console.log(e);
+    // Event.preventDefault();
+    //console.log(Event.target);
+    console.log(discuss1, " / ", discuss2);
+    console.log("에디터->", editData);
+    if (
+      debateDate === "" ||
+      editData === "" ||
+      discuss1 === "" ||
+      discuss2 === ""
+    ) {
+      // AlertDismissibleExample();
+      setShow(true);
+      // alert("모두 입력해주세요");
+    } else {
+      const Debate = {
+        debate_no: debate.debate_no,
+        debate_content: editData,
+        debate_topic: discuss1 + " VS " + discuss2,
+        discuss1_no: detail[0].detail_no,
+        discuss2_no: detail[1].detail_no,
+        discuss1: discuss1,
+        discuss2: discuss2,
+        debateDate: getCurrentDate(debateDate),
+        debateTime: debateTime,
+      };
+
+      const url = `http://localhost:9999/ta_back/debrecruit/update`;
+      fetch(url, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(Debate),
+        credentials: "include",
+      })
+        .then((res) => {
+          return res.json();
+        })
+        .then((data) => {
+          if (data.status == 1) {
+            console.log("결과->", data);
+            history.push("/ta_front/debrecruit.html");
+          } else if (data.status == 0) {
+            alert("작성실패");
+          }
+        });
+      console.log("Debate", Debate);
+    }
+  };
   const changeEditor = (event, editor) => {
     const data = editor.getData();
     setEditData(data);
@@ -179,7 +229,7 @@ export default function DebWrite(props) {
 
   return (
     <>
-      <button onClick={login}>로긴</button>
+      {/* <button onClick={login}>로긴</button> */}
       {/* https://www.youtube.com/watch?v=_-vCsD7jHh4 */}
       {/* <button onClick={click}>버튼</button> */}
       <Alert show={show} variant="success">
@@ -353,7 +403,7 @@ export default function DebWrite(props) {
                 variant="outline-success"
                 size="sm"
                 style={{ margin: "10px" }}
-                // onClick={debModify}
+                onClick={debModify}
               >
                 수정하기
               </Button>

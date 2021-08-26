@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
 import { Table } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import Paging from "./pagination/Paging";
-import { InputGroup, FormControl } from "react-bootstrap";
+import { InputGroup, FormControl, Alert } from "react-bootstrap";
 
 export default function DebateList() {
   const [list, setList] = useState({});
@@ -12,6 +12,7 @@ export default function DebateList() {
   const [loginInfo, setLoginInfo] = useState();
   const [writeButton, setwriteButton] = useState(false);
   const pageSize = 5;
+  const [loading, setLoading] = useState(true);
 
   //const pageNo = page;
   //console.log(pageNo);
@@ -46,6 +47,7 @@ export default function DebateList() {
     }
   }
   useEffect(() => {
+    setLoading(true);
     fetch(url, {
       method: "GET",
       credentials: "include",
@@ -59,6 +61,7 @@ export default function DebateList() {
         setCount(data.lastRow);
         setLoginInfo(data.logininfo);
         console.log("로그인정보->", loginInfo);
+        setLoading(false);
       });
   }, [url]);
 
@@ -89,10 +92,54 @@ export default function DebateList() {
         }
       });
   }
+  const history = useHistory();
+  function logout() {
+    // const mem = { member_social_no: "118153287897731040607" };
+    fetch("http://localhost:9999/ta_back/member/logout", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        member_social_no: "118153287897731040607",
+      }),
+      credentials: "include",
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        setLoginInfo(data.member);
+        console.log("--->", data);
+
+        history.push("/ta_front/debrecruit.html");
+        // console.log("로그인완료", loginInfo);
+        if (loginInfo) {
+          setwriteButton(writeButton);
+        } else {
+          setwriteButton(false);
+        }
+      });
+  }
 
   return (
     <>
-      <button onClick={login}>로긴</button>
+      {/* <button onClick={login}>로긴81</button>
+      <button onClick={logout}>로그아웃</button> */}
+      {loading ? (
+        <Alert show={loading} variant="success">
+          <Alert.Heading>로딩중입니다!</Alert.Heading>
+          <p>
+            네트워크가 불안정 합니다.
+            <br /> 잠시만 기다려주세요
+          </p>
+          <div className="d-flex justify-content-end">
+            <Button onClick={() => setLoading(false)} variant="outline-success">
+              Close
+            </Button>
+          </div>
+        </Alert>
+      ) : (
+        ""
+      )}
       <div
         style={{
           textAlign: "right",

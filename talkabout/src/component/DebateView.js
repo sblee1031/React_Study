@@ -106,69 +106,75 @@ export default function DebateView() {
         } //수정 삭제 버튼 끝
         //
         //참여버튼 시작
-        if (detail[0].discussor === null) {
-          // console.log("discussor1", discussor1);
+        if (
+          detail[1].discussor?.member_no !== loginInfo?.member_no &&
+          detail[0].discussor === null
+        ) {
+          console.log("discussor1", discussor1);
           setInButton1(true);
           // setInButton2(true);
           if (
             loginInfo !== "non-member" &&
             detail[1].discussor?.member_no !== loginInfo?.member_no
           ) {
-            // console.log(
-            //   "discussor2?.member_no != loginInfo?.member_no",
-            //   discussor2?.member_no
-            // );
+            console.log(
+              "discussor2?.member_no != loginInfo?.member_no",
+              discussor2?.member_no
+            );
             setInButton1(true);
           }
         } else if (
           loginInfo !== "non-member" &&
           detail[0].discussor?.member_no === loginInfo?.member_no
         ) {
-          // console.log(
-          //   "discussor1?.member_no == loginInfo?.member_no",
-          //   discussor1
-          // );
+          console.log(
+            "discussor1?.member_no == loginInfo?.member_no",
+            discussor1
+          );
           setOutButton1(true);
           setInButton1(false);
           setInButton2(false);
         } else {
-          // console.log(
-          //   "else discussor1",
-          //   "**dis1=>",
-          //   discussor1,
-          //   "dis2=>",
-          //   discussor2,
-          //   "logininfo=>",
-          //   loginInfo,
-          //   "debate",
-          //   debate,
-          //   "detail",
-          //   detail
-          // );
+          console.log(
+            "else discussor1",
+            "**dis1=>",
+            discussor1,
+            "dis2=>",
+            discussor2,
+            "logininfo=>",
+            loginInfo,
+            "debate",
+            debate,
+            "detail",
+            detail
+          );
           setInButton1(false);
         }
-        if (detail[1].discussor === null) {
-          // console.log("discussor2", discussor2);
+        if (
+          (detail[0].discussor?.member_no !== loginInfo?.member_no &&
+            detail[1].discussor) === null
+        ) {
+          console.log("discussor2", discussor2);
           // setInButton1(true);
           setInButton2(true);
           if (
             loginInfo !== "non-member" &&
             detail[0].discussor?.member_no !== loginInfo?.member_no
           ) {
-            // console.log(
-            //   "discussor1?.member_no != loginInfo?.member_no",
-            //   discussor1
-            // );
+            console.log(
+              "discussor1?.member_no != loginInfo?.member_no",
+              discussor1
+            );
             setInButton2(true);
           }
         } else if (
           loginInfo !== "non-member" &&
           detail[1].discussor?.member_no === loginInfo?.member_no
         ) {
-          // console.log(
-          //   "discussor2?.member_no == loginInfo?.member_no",
-          //   discussor1
-          // );
+          console.log(
+            "discussor2?.member_no == loginInfo?.member_no",
+            discussor1
+          );
           setOutButton2(true);
           setInButton1(false);
           setInButton2(false);
@@ -226,9 +232,42 @@ export default function DebateView() {
         }
       });
   };
-  // const debModify = () => {
-  //   console.log("수정");
-  // };
+  function discussFetch(method, dd_no, member_no) {
+    const url = "http://localhost:9999/ta_back/debrecruit/";
+    fetch(url + method, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ dd_no: dd_no, member_no: member_no }),
+      credentials: "include",
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((response) => {
+        if (response.status == 1) {
+          alert("수정완료");
+          history.push("/ta_front/debrecruit.html");
+        } else {
+          alert("수정실패", response.error);
+        }
+      });
+  }
+  const discuss1Button = (e) => {
+    // console.log("discuss1Button", e);
+    discussFetch("discussor", detail[0].detail_no, loginInfo.member_no);
+  };
+  const discuss2Button = (e) => {
+    // console.log("discuss2Button", e);
+    discussFetch("discussor", detail[1].detail_no, loginInfo.member_no);
+  };
+  const disCancle1Button = (e) => {
+    discussFetch("canclediscussor", detail[0].detail_no, loginInfo.member_no);
+  };
+  const disCancle2Button = (e) => {
+    discussFetch("canclediscussor", detail[1].detail_no, loginInfo.member_no);
+  };
 
   function login() {
     console.log(history);
@@ -253,9 +292,9 @@ export default function DebateView() {
 
   return (
     <>
-      로그인 번호 : {loginInfo?.member_no} / {loginInfo?.member_nickName}
-      {loading ? <div>Loading...</div> : <div>Loading끝</div>}
-      <button onClick={login}>로긴</button>
+      {/* 로그인 번호 : {loginInfo?.member_no} / {loginInfo?.member_nickName} */}
+      {loading ? <div>Loading...</div> : ""}
+      {/* <button onClick={login}>로긴1</button> */}
       {/* <button onClick={logo}>버튼</button> */}
       <div className="writeView" style={{ marginTop: "50px" }}>
         <div
@@ -305,10 +344,20 @@ export default function DebateView() {
                 />
               </p>
             ) : (
-              ""
+              <p style={{ fontSize: "15pt", margin: "5px", color: "red" }}>
+                참여가능
+              </p>
             )}
-            {outButton1 && <Button>참여취소</Button>}
-            {inButton1 && <Button>토론자1 참여</Button>}
+            {outButton1 && (
+              <Button variant="warning" onClick={disCancle1Button}>
+                참여취소
+              </Button>
+            )}
+            {inButton1 && (
+              <Button variant="outline-success" onClick={discuss1Button}>
+                토론자1 참여
+              </Button>
+            )}
           </label>
           <label className="vs" style={{ textAlign: "center", width: "10%" }}>
             {" "}
@@ -334,10 +383,20 @@ export default function DebateView() {
                 />
               </p>
             ) : (
-              ""
+              <p style={{ fontSize: "15pt", margin: "5px", color: "red" }}>
+                참여 가능
+              </p>
             )}
-            {outButton2 && <Button>참여취소</Button>}
-            {inButton2 && <Button>토론자2 참여</Button>}
+            {outButton2 && (
+              <Button variant="warning" onClick={disCancle2Button}>
+                참여취소
+              </Button>
+            )}
+            {inButton2 && (
+              <Button variant="outline-success" onClick={discuss2Button}>
+                토론자2 참여
+              </Button>
+            )}
           </label>
           <div
             className="debInfo"
