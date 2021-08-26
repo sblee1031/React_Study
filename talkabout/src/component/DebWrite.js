@@ -9,48 +9,15 @@ import "react-datepicker/dist/react-datepicker.css";
 // import AlertDismissible from "./AlertDismissible";
 
 export default function DebWrite(props) {
-  const [buttonState, setButtonState] = useState(true);
   const debate = props?.location?.state.debate;
   const detail = props?.location?.state.detail;
   const [debateTime, setDebateTime] = useState("30");
   const [debateDate, setDebateDate] = useState();
   const [pickerDate, setPickerDate] = useState();
-  const ocDebateDate = (e) => {
-    //시작날짜 설정
-    //  console.log(getCurrentDate(e));
-    //const year = e.getYears
-    //setDebateDate(getCurrentDate(e));
-    // console.log("debateDate", debateDate);
-    console.log("pickerDate", pickerDate);
-  };
-  const getPickerDate = (date) => {
-    setDebateDate(getCurrentDate(date));
-    console.log(
-      "getPickerDate",
-      date,
-      getCurrentDate(date),
-      "=>",
-      new Date(getCurrentDate(date))
-    );
-  };
-
-  useEffect(() => {
-    if (props?.location) {
-      //편집
-      setPickerDate(new Date(debate.debate_startDate));
-      setButtonState(false);
-      setDiscuss1(detail[0]?.discuss);
-      setDiscuss2(detail[1]?.discuss);
-      setDebateTime(debate?.debate_time);
-      console.log("setDebateDate", new Date(debate?.debate_startDate));
-      setDebateDate(new Date(debate?.debate_startDate));
-      // discuss2 = detail[1]?.discuss;
-      console.log("편집", props?.location.state);
-      console.log("=>", detail[0]);
-    }
-  }, [props]);
   const [discuss1, setDiscuss1] = useState("");
   const [discuss2, setDiscuss2] = useState("");
+  const [alertMent, setAlertMent] = useState("");
+  const [buttonState, setButtonState] = useState();
   // const editDiscuss1 = detail[0]?.discuss;
   // const editDiscuss2 = detail[1]?.discuss;
 
@@ -62,6 +29,54 @@ export default function DebWrite(props) {
 
   const [loginInfo, setLoginInfo] = useState();
   const [writeButton, setwriteButton] = useState(false);
+  const ocDebateDate = (e) => {
+    //시작날짜 설정
+    //  console.log(getCurrentDate(e));
+    //const year = e.getYears
+    //setDebateDate(getCurrentDate(e));
+    // console.log("debateDate", debateDate);
+    // console.log("pickerDate", pickerDate);
+  };
+  const getPickerDate = (date) => {
+    setDebateDate(getCurrentDate(date));
+    // console.log(
+    //   "getPickerDate",
+    //   date,
+    //   getCurrentDate(date),
+    //   "=>",
+    //   new Date(getCurrentDate(date))
+    // );
+  };
+
+  useEffect(() => {
+    setButtonState(true);
+    const edit = () => {
+      if (props?.location) {
+        //편집
+        setPickerDate(new Date(debate.debate_startDate));
+        setButtonState(false);
+        setDiscuss1(detail[0]?.discuss);
+        setDiscuss2(detail[1]?.discuss);
+        setDebateTime(debate?.debate_time);
+        setEditData(debate?.debate_content);
+        // console.log("setDebateDate", new Date(debate?.debate_startDate));
+        setDebateDate(new Date(debate?.debate_startDate));
+        // discuss2 = detail[1]?.discuss;
+        // console.log("편집", props?.location.state);
+        // console.log("=>", detail[0]);
+        // console.log(
+        //   //
+        //   "useState=>",
+        //   debateDate,
+        //   editData,
+        //   debateTime,
+        //   discuss1,
+        //   discuss2
+        // );
+      }
+    };
+    edit();
+  }, [props]);
 
   const ocDiscuss1 = (e) => {
     //console.log(discuss1);
@@ -73,8 +88,8 @@ export default function DebWrite(props) {
   const debWrite = (Event) => {
     Event.preventDefault();
     //console.log(Event.target);
-    console.log(discuss1, " / ", discuss2);
-    console.log("에디터->", editData);
+    // console.log(discuss1, " / ", discuss2);
+    // console.log("에디터->", editData);
     if (
       debateDate === "" ||
       editData === "" ||
@@ -82,6 +97,7 @@ export default function DebWrite(props) {
       discuss2 === ""
     ) {
       // AlertDismissibleExample();
+      setAlertMent("내용을 모두 입력해주세요.");
       setShow(true);
       // alert("모두 입력해주세요");
     } else {
@@ -110,29 +126,32 @@ export default function DebWrite(props) {
         })
         .then((data) => {
           if (data.status == 1) {
-            console.log("결과->", data);
+            // console.log("결과->", data);
             history.push("/ta_front/debrecruit.html");
           } else if (data.status == 0) {
             alert("작성실패");
           }
         });
-      console.log(Debate);
+      // console.log(Debate);
     }
   };
   const debModify = (e) => {
     //토론 수정
-    console.log(e);
+    // console.log(e);
     // Event.preventDefault();
     //console.log(Event.target);
-    console.log(discuss1, " / ", discuss2);
-    console.log("에디터->", editData);
+    // console.log(discuss1, " / ", discuss2);
+    // console.log("에디터->", editData);
+    // console.log(debateDate, getCurrentDate(debateDate));
     if (
-      debateDate === "" ||
-      editData === "" ||
-      discuss1 === "" ||
-      discuss2 === ""
+      getCurrentDate(debateDate) === debate.debate_startDate &&
+      editData === debate.debate_content &&
+      debateTime === debate.debate_time &&
+      discuss1 === detail[0].discuss &&
+      discuss2 === detail[1].discuss
     ) {
       // AlertDismissibleExample();
+      setAlertMent("수정할 내용이 없습니다.");
       setShow(true);
       // alert("모두 입력해주세요");
     } else {
@@ -160,19 +179,19 @@ export default function DebWrite(props) {
         })
         .then((data) => {
           if (data.status == 1) {
-            console.log("결과->", data);
+            // console.log("결과->", data);
             history.push("/ta_front/debrecruit.html");
           } else if (data.status == 0) {
             alert("작성실패");
           }
         });
-      console.log("Debate", Debate);
+      // console.log("Debate", Debate);
     }
   };
   const changeEditor = (event, editor) => {
     const data = editor.getData();
     setEditData(data);
-    console.log(data);
+    // console.log(data);
     //console.log({ event, editor, data });
   };
   function getCurrentDate(e) {
@@ -193,7 +212,6 @@ export default function DebWrite(props) {
 
     return year + "-" + month + "-" + day + " " + hour + ":" + minites + ":00"; // 현재시간보다 1시간 추가 ,최소 시작시간은 한시간 뒤부터 가능.
   }
-  const setDate = () => {};
   const ocDebateTime = (e) => {
     //토론제한시간 설정..
     setDebateTime(e.target.value);
@@ -217,7 +235,7 @@ export default function DebWrite(props) {
       })
       .then((data) => {
         setLoginInfo(data.member);
-        console.log("--->", data);
+        // console.log("--->", data);
         // console.log("로그인완료", loginInfo);
         if (loginInfo) {
           setwriteButton(writeButton);
@@ -232,11 +250,13 @@ export default function DebWrite(props) {
       {/* <button onClick={login}>로긴</button> */}
       {/* https://www.youtube.com/watch?v=_-vCsD7jHh4 */}
       {/* <button onClick={click}>버튼</button> */}
-      <Alert show={show} variant="success">
-        <Alert.Heading>빈칸이 있습니다!</Alert.Heading>
-        <p>토론 일자, 주장, 내용을 확인해주세요^___^</p>
+      <Alert show={show} variant="danger">
+        <Alert.Heading>{alertMent}</Alert.Heading>
+        <p style={{ fontSize: "13pt" }}>
+          토론 일자, 주장, 내용을 확인해주세요^___^
+        </p>
         <div className="d-flex justify-content-end">
-          <Button onClick={() => setShow(false)} variant="outline-success">
+          <Button onClick={() => setShow(false)} variant="warning">
             Close
           </Button>
         </div>

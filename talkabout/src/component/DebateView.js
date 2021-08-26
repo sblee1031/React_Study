@@ -92,7 +92,7 @@ export default function DebateView() {
         setInButton1(false);
         setInButton1(false);
       } else {
-        console.log("모집중");
+        // console.log("모집중");
         if (
           //수정 삭제 버튼 시작
           loginInfo !== "non-member" &&
@@ -110,71 +110,71 @@ export default function DebateView() {
           detail[1].discussor?.member_no !== loginInfo?.member_no &&
           detail[0].discussor === null
         ) {
-          console.log("discussor1", discussor1);
+          // console.log("discussor1", discussor1);
           setInButton1(true);
           // setInButton2(true);
           if (
             loginInfo !== "non-member" &&
             detail[1].discussor?.member_no !== loginInfo?.member_no
           ) {
-            console.log(
-              "discussor2?.member_no != loginInfo?.member_no",
-              discussor2?.member_no
-            );
+            // console.log(
+            //   "discussor2?.member_no != loginInfo?.member_no",
+            //   discussor2?.member_no
+            // );
             setInButton1(true);
           }
         } else if (
           loginInfo !== "non-member" &&
           detail[0].discussor?.member_no === loginInfo?.member_no
         ) {
-          console.log(
-            "discussor1?.member_no == loginInfo?.member_no",
-            discussor1
-          );
+          // console.log(
+          //   "discussor1?.member_no == loginInfo?.member_no",
+          //   discussor1
+          // );
           setOutButton1(true);
           setInButton1(false);
           setInButton2(false);
         } else {
-          console.log(
-            "else discussor1",
-            "**dis1=>",
-            discussor1,
-            "dis2=>",
-            discussor2,
-            "logininfo=>",
-            loginInfo,
-            "debate",
-            debate,
-            "detail",
-            detail
-          );
+          // console.log(
+          //   "else discussor1",
+          //   "**dis1=>",
+          //   discussor1,
+          //   "dis2=>",
+          //   discussor2,
+          //   "logininfo=>",
+          //   loginInfo,
+          //   "debate",
+          //   debate,
+          //   "detail",
+          //   detail
+          // );
           setInButton1(false);
         }
         if (
           (detail[0].discussor?.member_no !== loginInfo?.member_no &&
             detail[1].discussor) === null
         ) {
-          console.log("discussor2", discussor2);
+          // console.log("discussor2", discussor2);
           // setInButton1(true);
           setInButton2(true);
           if (
             loginInfo !== "non-member" &&
             detail[0].discussor?.member_no !== loginInfo?.member_no
           ) {
-            console.log(
-              "discussor1?.member_no != loginInfo?.member_no",
-              discussor1
-            );
+            // console.log(
+            //   "discussor1?.member_no != loginInfo?.member_no",
+            //   discussor1
+            // );
             setInButton2(true);
           }
         } else if (
           loginInfo !== "non-member" &&
           detail[1].discussor?.member_no === loginInfo?.member_no
         ) {
-          console.log(
-            "discussor2?.member_no == loginInfo?.member_no",
-            discussor1
-          );
+          // console.log(
+          //   "discussor2?.member_no == loginInfo?.member_no",
+          //   discussor1
+          // );
           setOutButton2(true);
           setInButton1(false);
           setInButton2(false);
@@ -210,7 +210,7 @@ export default function DebateView() {
   }, [loginInfo?.member_no]);
 
   const debDelete = () => {
-    console.log("삭제");
+    // console.log("삭제");
     const url = "http://localhost:9999/ta_back/debrecruit/delete";
     fetch(url, {
       method: "DELETE",
@@ -270,7 +270,7 @@ export default function DebateView() {
   };
 
   function login() {
-    console.log(history);
+    // console.log(history);
     const social = "37612893746";
     fetch("http://localhost:9999/ta_back/member/login?socialNo=" + social, {
       method: "POST",

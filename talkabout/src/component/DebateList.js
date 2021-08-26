@@ -13,6 +13,7 @@ export default function DebateList() {
   const [writeButton, setwriteButton] = useState(false);
   const pageSize = 5;
   const [loading, setLoading] = useState(true);
+  const [searchAlert, setSearchAlert] = useState(false);
 
   //const pageNo = page;
   //console.log(pageNo);
@@ -30,7 +31,8 @@ export default function DebateList() {
       //setUrl(url);
     } else {
       e.preventDefault();
-      alert("검색어를 입력해주세요");
+      setSearchAlert(true);
+      // alert("검색어를 입력해주세요");
     }
   };
   function setPage1(page) {
@@ -60,7 +62,7 @@ export default function DebateList() {
         setList(data);
         setCount(data.lastRow);
         setLoginInfo(data.logininfo);
-        console.log("로그인정보->", loginInfo);
+        // console.log("로그인정보->", loginInfo);
         setLoading(false);
       });
   }, [url]);
@@ -83,7 +85,7 @@ export default function DebateList() {
       })
       .then((data) => {
         setLoginInfo(data.member);
-        console.log("--->", data);
+        // console.log("--->", data);
         // console.log("로그인완료", loginInfo);
         if (loginInfo) {
           setwriteButton(writeButton);
@@ -108,7 +110,7 @@ export default function DebateList() {
       })
       .then((data) => {
         setLoginInfo(data.member);
-        console.log("--->", data);
+        // console.log("--->", data);
 
         history.push("/ta_front/debrecruit.html");
         // console.log("로그인완료", loginInfo);
@@ -127,10 +129,7 @@ export default function DebateList() {
       {loading ? (
         <Alert show={loading} variant="success">
           <Alert.Heading>로딩중입니다!</Alert.Heading>
-          <p>
-            네트워크가 불안정 합니다.
-            <br /> 잠시만 기다려주세요
-          </p>
+          <p>네트워크가 불안정 합니다. 잠시만 기다려주세요</p>
           <div className="d-flex justify-content-end">
             <Button onClick={() => setLoading(false)} variant="outline-success">
               Close
@@ -140,6 +139,20 @@ export default function DebateList() {
       ) : (
         ""
       )}
+
+      <Alert show={searchAlert} variant="success">
+        <Alert.Heading>검색어를 입력해주세요!</Alert.Heading>
+        <p>검색어는 필수 입니다 ^__^</p>
+        <div className="d-flex justify-content-end">
+          <Button
+            onClick={() => setSearchAlert(false)}
+            variant="outline-success"
+          >
+            Close
+          </Button>
+        </div>
+      </Alert>
+
       <div
         style={{
           textAlign: "right",
