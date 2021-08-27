@@ -250,13 +250,17 @@ export default function DebWrite(props) {
       {/* <button onClick={login}>로긴</button> */}
       {/* https://www.youtube.com/watch?v=_-vCsD7jHh4 */}
       {/* <button onClick={click}>버튼</button> */}
-      <Alert show={show} variant="danger">
+      <Alert show={show} variant="warning">
         <Alert.Heading>{alertMent}</Alert.Heading>
         <p style={{ fontSize: "13pt" }}>
           토론 일자, 주장, 내용을 확인해주세요^___^
         </p>
         <div className="d-flex justify-content-end">
-          <Button onClick={() => setShow(false)} variant="warning">
+          <Button
+            onClick={() => setShow(false)}
+            variant="outline-danger"
+            style={{ border: "none" }}
+          >
             Close
           </Button>
         </div>

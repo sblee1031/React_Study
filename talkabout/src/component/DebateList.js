@@ -127,11 +127,15 @@ export default function DebateList() {
       {/* <button onClick={login}>로긴81</button>
       <button onClick={logout}>로그아웃</button> */}
       {loading ? (
-        <Alert show={loading} variant="success">
+        <Alert show={loading} variant="warning">
           <Alert.Heading>로딩중입니다!</Alert.Heading>
           <p>네트워크가 불안정 합니다. 잠시만 기다려주세요</p>
           <div className="d-flex justify-content-end">
-            <Button onClick={() => setLoading(false)} variant="outline-success">
+            <Button
+              onClick={() => setLoading(false)}
+              variant="outline-danger"
+              style={{ border: "none" }}
+            >
               Close
             </Button>
           </div>
@@ -140,16 +144,19 @@ export default function DebateList() {
         ""
       )}
 
-      <Alert show={searchAlert} variant="success">
+      <Alert show={searchAlert} variant="warning">
         <Alert.Heading>검색어를 입력해주세요!</Alert.Heading>
         <p>검색어는 필수 입니다 ^__^</p>
         <div className="d-flex justify-content-end">
-          <Button
-            onClick={() => setSearchAlert(false)}
-            variant="outline-success"
-          >
-            Close
-          </Button>
+          {
+            <Button
+              onClick={() => setSearchAlert(false)}
+              variant="outline-danger"
+              style={{ border: "none" }}
+            >
+              Close
+            </Button>
+          }
         </div>
       </Alert>
 
@@ -207,9 +214,9 @@ export default function DebateList() {
           </Link>
         </div>
       )}
-      <Table responsive="xl" hover>
+      <Table className="table table-hovor" responsive="xl" hover>
         <thead>
-          <tr style={{ fontSize: "14pt" }}>
+          <tr className="table-primary" style={{ fontSize: "14pt" }}>
             <th style={{ width: "10%" }}>토론번호</th>
             <th style={{ width: "25%" }}>토론제목</th>
             <th style={{ width: "10%" }}>작성자</th>
@@ -220,7 +227,7 @@ export default function DebateList() {
         </thead>
         <tbody>
           {list.debatelist?.map((debate) => (
-            <tr key={debate.debate_no}>
+            <tr className="table-light" key={debate.debate_no}>
               <td>{debate.debate_no}</td>
               <td>
                 <Link to={`/ta_front/debrecruit/${debate.debate_no}`}>
