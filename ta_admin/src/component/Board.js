@@ -1,7 +1,8 @@
-export default function BoardList(props) {
+export default function Board(props) {
+  console.log("board props", props.userInfo);
   return (
     <>
-      <div>Board</div>
+      <div>자유게시판</div>
     </>
   );
 }

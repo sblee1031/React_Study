@@ -1,49 +1,87 @@
-import { useEffect, useRef, useState } from "react";
-import { BrowserRouter, Switch, Route, useHistory } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Route, useHistory } from "react-router-dom";
 import Notice from "./Notice";
 import Board from "./Board";
+import DebRecruit from "./DebRecruit";
+import DebBattle from "./DebBattle";
+import DebResult from "./DebResult";
+import { Dropdown, DropdownButton } from "react-bootstrap";
 import "./css/bootstrap.css";
 
 export default function AdminList(props) {
-  const history = useHistory();
-  console.log(props);
+  //console.log(props);
   const [selectList, setSelectList] = useState("notice");
-
+  const url = "/ta_front/admin/" + selectList;
+  const history = useHistory();
   const select = (e) => {
-    console.log(e.target.value);
-    setSelectList(e.target.value);
+    // console.log("select=>", e);
+    setSelectList(e);
   };
   useEffect(() => {
-    console.log("useEffect", selectList);
-    const url = "/ta_front/admin/" + selectList;
+    // console.log("Effect", selectList);
     history.push(url);
-  }, [selectList]);
+  }, [url]);
 
   return (
     <>
       <div className="container">
         <h1>{props.userInfo}님 환영합니다.</h1>
         <div>
-          게시판 선택
-          <select onChange={select}>
-            <option value="notice">공지사항</option>
-            <option value="board">자유게시판</option>
-            <option value="debrecruite">토론모집</option>
-            <option value="debbattle">토론배틀</option>
-            <option value="debresult">토론결과</option>
-          </select>
+          <h3>게시판 선택</h3>
+          <DropdownButton id="dropdown-basic-button" title="게시판">
+            <Dropdown.Item
+              onClick={() => {
+                select("notice");
+              }}
+            >
+              공지사항
+            </Dropdown.Item>
+            <Dropdown.Item
+              onClick={() => {
+                select("board");
+              }}
+            >
+              자유게시판
+            </Dropdown.Item>
+            <Dropdown.Item
+              onClick={() => {
+                select("debrecruite");
+              }}
+            >
+              토론모집
+            </Dropdown.Item>
+            <Dropdown.Item
+              onClick={() => {
+                select("debbattle");
+              }}
+            >
+              토론배틀
+            </Dropdown.Item>
+            <Dropdown.Item
+              onClick={() => {
+                select("debresult");
+              }}
+            >
+              토론결과
+            </Dropdown.Item>
+          </DropdownButton>
         </div>
         <div id="view">
-          <BrowserRouter>
-            <Switch>
-              <Route path="/ta_front/admin/notice">
-                <Notice />
-              </Route>
-              <Route path="/ta_front/admin/board">
-                <Board />
-              </Route>
-            </Switch>
-          </BrowserRouter>
+          <Route path="/ta_front/admin/notice">
+            <Notice userInfo={props.userInfo} />
+          </Route>
+          <Route path="/ta_front/admin/board">
+            <Board userInfo={props.userInfo} />
+          </Route>
+          <Route path="/ta_front/admin/debrecruite">
+            <DebRecruit userInfo={props.userInfo} />
+          </Route>
+          <Route path="/ta_front/admin/debbattle">
+            <DebBattle userInfo={props.userInfo} />
+          </Route>
+          <Route path="/ta_front/admin/debresult">
+            <DebResult userInfo={props.userInfo} />
+          </Route>
         </div>
       </div>
     </>
