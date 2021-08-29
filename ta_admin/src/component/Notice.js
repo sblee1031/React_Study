@@ -1,4 +1,11 @@
-import { Table, Modal } from "react-bootstrap";
+import {
+  Table,
+  Modal,
+  InputGroup,
+  FormControl,
+  Dropdown,
+  DropdownButton,
+} from "react-bootstrap";
 import { useEffect, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import Paging from "./pagination/Paging";
@@ -14,6 +21,8 @@ export default function Notice(props) {
   const [count, setCount] = useState(1);
   const history = useHistory();
   const [show, setShow] = useState(false);
+  const [writeShow, setWriteShow] = useState(false);
+  const [noticeType, setNoticeType] = useState("");
   const [url, setUrl] = useState(
     `http://localhost:9999/ta_back/admin/notice/list?pageNo=${page}&pageSize=${pageSize}`
   );
@@ -74,7 +83,14 @@ export default function Notice(props) {
     <>
       <h1>공지사항</h1>
       <div>
-        <button className="btn btn-success">공지 작성</button>
+        <button
+          className="btn btn-success"
+          onClick={() => {
+            setWriteShow(true);
+          }}
+        >
+          공지 작성
+        </button>
       </div>
       <Table hover>
         <thead className="table-success">
@@ -130,39 +146,122 @@ export default function Notice(props) {
       <div className="paging">
         <Paging page={page} count={count} setPage={setPage1} />
       </div>
-      <Modal
-        show={show}
-        onHide={() => setShow(false)}
-        dialogClassName="modal-90w"
-        aria-labelledby="example-custom-modal-styling-title"
-        fullscreen="xxl-down"
-        size="lg"
-      >
-        <Modal.Header closeButton>
-          <Modal.Title id="example-custom-modal-styling-title">
-            {modalContent?.notice_title}
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <p>{modalContent?.notice_contents}</p>
-        </Modal.Body>
-        <Modal.Footer>
-          <button
-            className="btn btn-outline-success"
-            style={{ marginRight: "10px" }}
-            id={modalContent?.notice_no}
-          >
-            수정
-          </button>
-          <button
-            className="btn btn-outline-success"
-            id={modalContent?.notice_no}
-            onClick={noticeDel}
-          >
-            삭제
-          </button>
-        </Modal.Footer>
-      </Modal>
+      <div className="viewModal">
+        <Modal
+          show={show}
+          onHide={() => setShow(false)}
+          dialogClassName="modal-90w"
+          aria-labelledby="example-custom-modal-styling-title"
+          fullscreen="xxl-down"
+          size="lg"
+        >
+          <Modal.Header closeButton>
+            <Modal.Title id="example-custom-modal-styling-title">
+              {modalContent?.notice_title}
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <p>{modalContent?.notice_contents}</p>
+          </Modal.Body>
+          <Modal.Footer>
+            <button
+              className="btn btn-outline-success"
+              style={{ marginRight: "10px" }}
+              id={modalContent?.notice_no}
+            >
+              수정
+            </button>
+            <button
+              className="btn btn-outline-success"
+              id={modalContent?.notice_no}
+              onClick={noticeDel}
+            >
+              삭제
+            </button>
+          </Modal.Footer>
+        </Modal>
+      </div>
+      <div className="writeModal">
+        <Modal
+          show={writeShow}
+          onHide={() => setWriteShow(false)}
+          dialogClassName="modal-100w"
+          aria-labelledby="example-custom-modal-styling-title"
+          // fullscreen="xxl-down"
+          size="lg"
+          centered
+        >
+          <Modal.Header closeButton>
+            <Modal.Title
+              id="example-custom-modal-styling-title"
+              style={{
+                marginLeft: "auto",
+                marginRight: "auto",
+                width: "100%",
+              }}
+            >
+              <div style={{ marginBottom: "20px" }}>
+                <DropdownButton
+                  variant="outline-secondary"
+                  title="공지 종류"
+                  id="input-group-dropdown-2"
+                  align="end"
+                  style={{
+                    display: "inline",
+                    marginRight: "10px",
+                  }}
+                >
+                  <Dropdown.Item
+                    onClick={() => {
+                      setNoticeType("공지사항");
+                    }}
+                  >
+                    공지사항
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    onClick={() => {
+                      setNoticeType("이벤트");
+                    }}
+                  >
+                    이벤트
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    onClick={() => {
+                      setNoticeType("업데이트");
+                    }}
+                  >
+                    업데이트
+                  </Dropdown.Item>
+                </DropdownButton>
+                {noticeType}
+              </div>
+              <InputGroup className="mb-3" size="lg" style={{ width: "95%" }}>
+                <InputGroup.Text id="basic-addon1">제목</InputGroup.Text>
+                <FormControl
+                  placeholder="제목을 입력해주세요."
+                  aria-label="Username"
+                  aria-describedby="basic-addon1"
+                />
+              </InputGroup>
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <InputGroup size="lg" style={{ minHeight: "400px" }}>
+              <InputGroup.Text>내용</InputGroup.Text>
+              <FormControl as="textarea" aria-label="With textarea" />
+            </InputGroup>
+          </Modal.Body>
+          <Modal.Footer>
+            <button
+              className="btn btn-outline-success"
+              style={{ marginRight: "10px" }}
+              id={modalContent?.notice_no}
+            >
+              작성
+            </button>
+          </Modal.Footer>
+        </Modal>
+      </div>
     </>
   );
 }
