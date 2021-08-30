@@ -232,20 +232,25 @@ export default function DebateView() {
         }
       });
   };
-  function discussFetch(method, dd_no, member_no) {
+  function discussFetch(method, dd_no, member_no, deb_no) {
     const url = "http://localhost:9999/ta_back/debrecruit/";
     fetch(url + method, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ dd_no: dd_no, member_no: member_no }),
+      body: JSON.stringify({
+        dd_no: dd_no,
+        member_no: member_no,
+        deb_no: deb_no,
+      }),
       credentials: "include",
     })
       .then((res) => {
         return res.json();
       })
       .then((response) => {
+        console.log("참여 응답", response);
         if (response.status == 1) {
           alert("수정완료");
           history.push("/ta_front/debrecruit.html");
@@ -256,17 +261,37 @@ export default function DebateView() {
   }
   const discuss1Button = (e) => {
     // console.log("discuss1Button", e);
-    discussFetch("discussor", detail[0].detail_no, loginInfo.member_no);
+    discussFetch(
+      "discussor",
+      detail[0].detail_no,
+      loginInfo.member_no,
+      debate.debate_no
+    );
   };
   const discuss2Button = (e) => {
     // console.log("discuss2Button", e);
-    discussFetch("discussor", detail[1].detail_no, loginInfo.member_no);
+    discussFetch(
+      "discussor",
+      detail[1].detail_no,
+      loginInfo.member_no,
+      debate.debate_no
+    );
   };
   const disCancle1Button = (e) => {
-    discussFetch("canclediscussor", detail[0].detail_no, loginInfo.member_no);
+    discussFetch(
+      "canclediscussor",
+      detail[0].detail_no,
+      loginInfo.member_no,
+      debate.debate_no
+    );
   };
   const disCancle2Button = (e) => {
-    discussFetch("canclediscussor", detail[1].detail_no, loginInfo.member_no);
+    discussFetch(
+      "canclediscussor",
+      detail[1].detail_no,
+      loginInfo.member_no,
+      debate.debate_no
+    );
   };
 
   function login() {
@@ -294,8 +319,8 @@ export default function DebateView() {
     <>
       {/* 로그인 번호 : {loginInfo?.member_no} / {loginInfo?.member_nickName} */}
       {loading ? <div>Loading...</div> : ""}
-      {/* <button onClick={login}>로긴1</button> */}
-      {/* <button onClick={logo}>버튼</button> */}
+      {/* <button onClick={login}>로긴1</button>
+      <button onClick={logo}>버튼</button> */}
       <div className="writeView" style={{ marginTop: "50px" }}>
         <div
           className="divDiscuss"

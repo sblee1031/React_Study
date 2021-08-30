@@ -7,11 +7,11 @@ import {
   DropdownButton,
 } from "react-bootstrap";
 import { useEffect, useState } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Paging from "./pagination/Paging";
 
 export default function Notice(props) {
-  console.log("notice props", props.userInfo);
+  //console.log("notice props", props.userInfo);
   const [list, setList] = useState({});
   const [page, setPage] = useState(1);
   const [word, setWord] = useState();
@@ -19,10 +19,15 @@ export default function Notice(props) {
   const [modalContent, setModalContent] = useState();
   const pageSize = 5;
   const [count, setCount] = useState(1);
-  const history = useHistory();
+  //const history = useHistory();
   const [show, setShow] = useState(false);
   const [writeShow, setWriteShow] = useState(false);
+  const [editButton, setEditButton] = useState(false);
   const [noticeType, setNoticeType] = useState("");
+  const [noticeTitle, setNoticeTitle] = useState();
+  const [noticeContent, setNoticeContent] = useState();
+  const [noticeNo, setNoticeNo] = useState();
+
   const [url, setUrl] = useState(
     `http://localhost:9999/ta_back/admin/notice/list?pageNo=${page}&pageSize=${pageSize}`
   );
@@ -60,7 +65,7 @@ export default function Notice(props) {
   }, [page, requestData]);
   const noticeDel = (e) => {
     const { id } = e.target;
-    console.log("=>", id);
+    // console.log("=>", id);
     const url = "http://localhost:9999/ta_back/notice/" + id;
     fetch(url, {
       method: "DELETE",
@@ -70,7 +75,7 @@ export default function Notice(props) {
         return res.json();
       })
       .then((data) => {
-        console.log("--->", data);
+        //console.log("--->", data);
         setRequestData(new Date());
         setShow(false);
         // setLoginInfo(data.logininfo);
@@ -79,6 +84,79 @@ export default function Notice(props) {
       });
   };
 
+  const noticeWrite = () => {
+    const url = "http://localhost:9999/ta_back/notice/";
+    fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        notice_type: noticeType,
+        notice_title: noticeTitle,
+        notice_contents: noticeContent,
+        notice_admin: props.userInfo,
+      }),
+      credentials: "include",
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        //console.log("--->", data);
+        setRequestData(new Date());
+        setWriteShow(false);
+        // setLoginInfo(data.logininfo);
+        // console.log("로그인정보->", loginInfo);
+        // setLoading(false);
+      });
+  };
+  const noticeUpdate = () => {
+    const url = "http://localhost:9999/ta_back/notice/" + noticeNo;
+    console.log("no=>", url);
+
+    fetch(url, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        notice_no: noticeNo,
+        notice_type: noticeType,
+        notice_title: noticeTitle,
+        notice_contents: noticeContent,
+        //notice_admin: props.userInfo,
+      }),
+      credentials: "include",
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        //console.log("--->", data);
+        setRequestData(new Date());
+        setWriteShow(false);
+        // setLoginInfo(data.logininfo);
+        // console.log("로그인정보->", loginInfo);
+        // setLoading(false);
+      });
+  };
+  const noticeEdit = (e) => {
+    const { id } = e.target;
+    console.log(id);
+    setShow(false);
+    setWriteShow(true);
+    setEditButton(true);
+    setNoticeNo(list.noticelist[id].notice_no);
+    setNoticeType(list.noticelist[id].notice_type);
+    setNoticeTitle(list.noticelist[id].notice_title);
+    setNoticeContent(list.noticelist[id].notice_contents);
+  };
+  const modalEdit = (e) => {
+    setShow(false);
+    setWriteShow(true);
+    setEditButton(true);
+    setNoticeNo(modalContent.notice_no);
+    setNoticeType(modalContent.notice_type);
+    setNoticeTitle(modalContent.notice_title);
+    setNoticeContent(modalContent.notice_contents);
+  };
   return (
     <>
       <h1>공지사항</h1>
@@ -87,6 +165,11 @@ export default function Notice(props) {
           className="btn btn-success"
           onClick={() => {
             setWriteShow(true);
+            setEditButton(false);
+            setNoticeNo();
+            setNoticeType();
+            setNoticeTitle();
+            setNoticeContent();
           }}
         >
           공지 작성
@@ -105,14 +188,16 @@ export default function Notice(props) {
           </tr>
         </thead>
         <tbody className="table-light">
-          {list.noticelist?.map((notice) => (
+          {list.noticelist?.map((notice, index) => (
             <tr className="table-light" key={notice.notice_no}>
               <td>{notice.notice_no}</td>
               <td>{notice.notice_type}</td>
               <td>
                 <Link
-                  onClick={() => {
-                    console.log("notice=>", notice);
+                  to="/"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    // console.log("notice=>", notice);
                     setShow(true);
                     setModalContent(notice);
                   }}
@@ -127,7 +212,8 @@ export default function Notice(props) {
                 <button
                   className="btn btn-outline-success"
                   style={{ marginRight: "10px" }}
-                  id={notice.notice_no}
+                  id={index}
+                  onClick={noticeEdit}
                 >
                   수정
                 </button>
@@ -161,13 +247,26 @@ export default function Notice(props) {
             </Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <p>{modalContent?.notice_contents}</p>
+            <InputGroup size="lg" style={{ minHeight: "400px" }}>
+              <InputGroup.Text>내용</InputGroup.Text>
+              <FormControl
+                as="textarea"
+                aria-label="With textarea"
+                // onChange={(e) => {
+                //   setNoticeContent(e.target.value);
+                // }}
+                readOnly
+                value={modalContent?.notice_contents}
+              />
+            </InputGroup>
+            {/* <p>{modalContent?.notice_contents}</p> */}
           </Modal.Body>
           <Modal.Footer>
             <button
               className="btn btn-outline-success"
               style={{ marginRight: "10px" }}
               id={modalContent?.notice_no}
+              onClick={modalEdit}
             >
               수정
             </button>
@@ -241,6 +340,11 @@ export default function Notice(props) {
                   placeholder="제목을 입력해주세요."
                   aria-label="Username"
                   aria-describedby="basic-addon1"
+                  onChange={(e) => {
+                    setNoticeTitle(e.target.value);
+                    //console.log(noticeTitle);
+                  }}
+                  value={noticeTitle}
                 />
               </InputGroup>
             </Modal.Title>
@@ -248,17 +352,36 @@ export default function Notice(props) {
           <Modal.Body>
             <InputGroup size="lg" style={{ minHeight: "400px" }}>
               <InputGroup.Text>내용</InputGroup.Text>
-              <FormControl as="textarea" aria-label="With textarea" />
+              <FormControl
+                as="textarea"
+                aria-label="With textarea"
+                onChange={(e) => {
+                  setNoticeContent(e.target.value);
+                }}
+                value={noticeContent}
+              />
             </InputGroup>
           </Modal.Body>
           <Modal.Footer>
-            <button
-              className="btn btn-outline-success"
-              style={{ marginRight: "10px" }}
-              id={modalContent?.notice_no}
-            >
-              작성
-            </button>
+            {editButton ? (
+              <button
+                className="btn btn-outline-success"
+                style={{ marginRight: "10px" }}
+                id={modalContent?.notice_no}
+                onClick={noticeUpdate}
+              >
+                수정
+              </button>
+            ) : (
+              <button
+                className="btn btn-outline-success"
+                style={{ marginRight: "10px" }}
+                id={modalContent?.notice_no}
+                onClick={noticeWrite}
+              >
+                작성
+              </button>
+            )}
           </Modal.Footer>
         </Modal>
       </div>

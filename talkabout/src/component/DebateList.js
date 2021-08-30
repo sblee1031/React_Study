@@ -12,7 +12,7 @@ export default function DebateList() {
   const [loginInfo, setLoginInfo] = useState();
   const [writeButton, setwriteButton] = useState(false);
   const pageSize = 5;
-  const [loading, setLoading] = useState(true);
+  // const [loading, setLoading] = useState(true);
   const [searchAlert, setSearchAlert] = useState(false);
 
   //const pageNo = page;
@@ -49,7 +49,7 @@ export default function DebateList() {
     }
   }
   useEffect(() => {
-    setLoading(true);
+    // setLoading(true);
     fetch(url, {
       method: "GET",
       credentials: "include",
@@ -63,7 +63,7 @@ export default function DebateList() {
         setCount(data.lastRow);
         setLoginInfo(data.logininfo);
         // console.log("로그인정보->", loginInfo);
-        setLoading(false);
+        // setLoading(false);
       });
   }, [url]);
 
@@ -124,9 +124,9 @@ export default function DebateList() {
 
   return (
     <>
-      {/* <button onClick={login}>로긴81</button>
-      <button onClick={logout}>로그아웃</button> */}
-      {loading ? (
+      <button onClick={login}>로긴81</button>
+      <button onClick={logout}>로그아웃</button>
+      {/* {loading ? (
         <Alert show={loading} variant="warning">
           <Alert.Heading>로딩중입니다!</Alert.Heading>
           <p>네트워크가 불안정 합니다. 잠시만 기다려주세요</p>
@@ -142,7 +142,7 @@ export default function DebateList() {
         </Alert>
       ) : (
         ""
-      )}
+      )} */}
 
       <Alert show={searchAlert} variant="warning">
         <Alert.Heading>검색어를 입력해주세요!</Alert.Heading>
@@ -214,9 +214,9 @@ export default function DebateList() {
           </Link>
         </div>
       )}
-      <Table className="table table-hovor" responsive="xl" hover>
-        <thead>
-          <tr className="table-primary" style={{ fontSize: "14pt" }}>
+      <Table responsive="xl" hover>
+        <thead className="table-primary">
+          <tr style={{ fontSize: "14pt" }}>
             <th style={{ width: "10%" }}>토론번호</th>
             <th style={{ width: "25%" }}>토론제목</th>
             <th style={{ width: "10%" }}>작성자</th>
@@ -225,9 +225,9 @@ export default function DebateList() {
             <th style={{ width: "10%" }}>진행상태</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className="table-light">
           {list.debatelist?.map((debate) => (
-            <tr className="table-light" key={debate.debate_no}>
+            <tr key={debate.debate_no}>
               <td>{debate.debate_no}</td>
               <td>
                 <Link to={`/ta_front/debrecruit/${debate.debate_no}`}>
