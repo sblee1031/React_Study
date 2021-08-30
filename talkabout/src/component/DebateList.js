@@ -124,8 +124,8 @@ export default function DebateList() {
 
   return (
     <>
-      <button onClick={login}>로긴81</button>
-      <button onClick={logout}>로그아웃</button>
+      {/* <button onClick={login}>로긴81</button>
+      <button onClick={logout}>로그아웃</button> */}
       {/* {loading ? (
         <Alert show={loading} variant="warning">
           <Alert.Heading>로딩중입니다!</Alert.Heading>
