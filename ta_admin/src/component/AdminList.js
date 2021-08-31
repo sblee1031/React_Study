@@ -25,46 +25,52 @@ export default function AdminList(props) {
   return (
     <>
       <div className="container">
-        <h1>{props.userInfo}님 환영합니다.</h1>
-        <div>
-          <h3>게시판 선택</h3>
-          <DropdownButton id="dropdown-basic-button" title="게시판">
-            <Dropdown.Item
-              onClick={() => {
-                select("notice");
-              }}
+        <h1>관리자 {props.userInfo}님 환영합니다.</h1>
+        <div style={{ display: "inline", textAlign: "right" }}>
+          <h3>
+            게시판 선택
+            <DropdownButton
+              style={{ margin: "20px 20px" }}
+              id="dropdown-basic-button"
+              title="게시판"
             >
-              공지사항
-            </Dropdown.Item>
-            <Dropdown.Item
-              onClick={() => {
-                select("board");
-              }}
-            >
-              자유게시판
-            </Dropdown.Item>
-            <Dropdown.Item
-              onClick={() => {
-                select("debrecruite");
-              }}
-            >
-              토론모집
-            </Dropdown.Item>
-            <Dropdown.Item
-              onClick={() => {
-                select("debbattle");
-              }}
-            >
-              토론배틀
-            </Dropdown.Item>
-            <Dropdown.Item
-              onClick={() => {
-                select("debresult");
-              }}
-            >
-              토론결과
-            </Dropdown.Item>
-          </DropdownButton>
+              <Dropdown.Item
+                onClick={() => {
+                  select("notice");
+                }}
+              >
+                공지사항
+              </Dropdown.Item>
+              <Dropdown.Item
+                onClick={() => {
+                  select("board");
+                }}
+              >
+                자유게시판
+              </Dropdown.Item>
+              <Dropdown.Item
+                onClick={() => {
+                  select("debrecruite");
+                }}
+              >
+                토론모집
+              </Dropdown.Item>
+              {/* <Dropdown.Item
+                onClick={() => {
+                  select("debbattle");
+                }}
+              >
+                토론배틀
+              </Dropdown.Item> */}
+              <Dropdown.Item
+                onClick={() => {
+                  select("debresult");
+                }}
+              >
+                토론결과
+              </Dropdown.Item>
+            </DropdownButton>
+          </h3>
         </div>
         <div id="view">
           <Route path="/ta_front/admin/notice">

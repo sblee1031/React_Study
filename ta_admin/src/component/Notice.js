@@ -14,12 +14,11 @@ export default function Notice(props) {
   //console.log("notice props", props.userInfo);
   const [list, setList] = useState({});
   const [page, setPage] = useState(1);
+  const [count, setCount] = useState(1);
   const [word, setWord] = useState();
   const [requestData, setRequestData] = useState(new Date());
   const [modalContent, setModalContent] = useState();
   const pageSize = 5;
-  const [count, setCount] = useState(1);
-  //const history = useHistory();
   const [show, setShow] = useState(false);
   const [writeShow, setWriteShow] = useState(false);
   const [editButton, setEditButton] = useState(false);
@@ -27,6 +26,8 @@ export default function Notice(props) {
   const [noticeTitle, setNoticeTitle] = useState();
   const [noticeContent, setNoticeContent] = useState();
   const [noticeNo, setNoticeNo] = useState();
+  const [replyShow, setReplyShow] = useState();
+  const [replyList, setReplyList] = useState();
 
   const [url, setUrl] = useState(
     `http://localhost:9999/ta_back/admin/notice/list?pageNo=${page}&pageSize=${pageSize}`
@@ -157,10 +158,59 @@ export default function Notice(props) {
     setNoticeTitle(modalContent.notice_title);
     setNoticeContent(modalContent.notice_contents);
   };
+  const replyView = (e) => {
+    const { id } = e.target;
+    const url = "http://localhost:9999/ta_back/noticecomment/list/" + id;
+    console.log("no=>", url);
+
+    fetch(url, {
+      method: "get",
+      headers: { "Content-Type": "application/json" },
+
+      credentials: "include",
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        console.log("--->", data);
+        setReplyList(data.list);
+        setReplyShow(true);
+        // setLoading(false);
+      });
+  };
+  const replyDelete = (e) => {
+    const { id } = e.target;
+    const url = "http://localhost:9999/ta_back/noticecomment/" + id;
+    console.log("no=>", url);
+
+    fetch(url, {
+      method: "delete",
+      headers: { "Content-Type": "application/json" },
+
+      credentials: "include",
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        console.log("--->", data);
+        if (data.status == 1) {
+          alert("삭제 성공");
+          setReplyShow(false);
+        } else if (data.status == 0) {
+          alert("삭제 실패", data.msg);
+        }
+        //setReplyList(data.list);
+        //setReplyShow(true);
+        // setLoading(false);
+      });
+  };
+
   return (
     <>
       <h1>공지사항</h1>
-      <div>
+      <div style={{ textAlign: "right", margin: "10px" }}>
         <button
           className="btn btn-success"
           onClick={() => {
@@ -176,7 +226,10 @@ export default function Notice(props) {
         </button>
       </div>
       <Table hover>
-        <thead className="table-success">
+        <thead
+          className="table-success"
+          style={{ fontSize: "15pt", fontWeight: "700" }}
+        >
           <tr>
             <td style={{ width: "5%" }}>번호</td>
             <td style={{ width: "5%" }}>종류</td>
@@ -212,13 +265,21 @@ export default function Notice(props) {
                 <button
                   className="btn btn-outline-success"
                   style={{ marginRight: "10px" }}
+                  id={notice.notice_no}
+                  onClick={replyView}
+                >
+                  댓글
+                </button>
+                <button
+                  className="btn btn-outline-info"
+                  style={{ marginRight: "10px" }}
                   id={index}
                   onClick={noticeEdit}
                 >
                   수정
                 </button>
                 <button
-                  className="btn btn-outline-success"
+                  className="btn btn-outline-danger"
                   id={notice.notice_no}
                   onClick={noticeDel}
                 >
@@ -383,6 +444,60 @@ export default function Notice(props) {
               </button>
             )}
           </Modal.Footer>
+        </Modal>
+      </div>
+      <div className="replyModal">
+        <Modal
+          show={replyShow}
+          onHide={() => setReplyShow(false)}
+          dialogClassName="modal-100w"
+          aria-labelledby="example-custom-modal-styling-title"
+          // fullscreen="xxl-down"
+          size="lg"
+          centered
+        >
+          <Modal.Header closeButton>
+            <Modal.Title
+              id="example-custom-modal-styling-title"
+              style={{
+                marginLeft: "auto",
+                marginRight: "auto",
+                width: "100%",
+              }}
+            >
+              <div style={{ marginBottom: "20px" }}>댓글 리스트</div>
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Table bordered hover style={{ textAlign: "center" }}>
+              <thead className="table-success">
+                <tr>
+                  <td>댓글 번호</td>
+                  <td>댓글 내용</td>
+                  <td>댓글 작성자</td>
+                  <td>삭제</td>
+                </tr>
+              </thead>
+              <tbody className="table-light">
+                {replyList?.map((list) => (
+                  <tr key={list.com_no}>
+                    <td>{list.com_no}</td>
+                    <td>{list.com_contents}</td>
+                    <td>{list.com_mem.member_nickName}</td>
+                    <td>
+                      <button
+                        className="btn btn-danger"
+                        id={list.com_no}
+                        onClick={replyDelete}
+                      >
+                        삭제
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          </Modal.Body>
         </Modal>
       </div>
     </>
