@@ -1,6 +1,6 @@
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-
+import "./css/debateWrite.css";
 import { Button, Form, Alert } from "react-bootstrap";
 import { Link, useHistory } from "react-router-dom";
 import React, { useEffect, useState } from "react";
@@ -267,8 +267,8 @@ export default function DebWrite(props) {
       </Alert>
       <div className="writeView">
         <form onSubmit={debWrite}>
-          <div className="debDate" style={{ fontSize: "10pt" }}>
-            <label className="labelDebDate">
+          <div className="debDate" style={{ fontSize: "20pt" }}>
+            <label className="labelDebDate" style={{ marginRight: "130px" }}>
               토론일자
               <Datepick
                 setPickerDate={pickerDate}
@@ -281,7 +281,10 @@ export default function DebWrite(props) {
             <label className="labelDebDate">
               토론제한시간
               <br />
-              <Form.Group controlId="exampleForm.SelectCustom">
+              <Form.Group
+                controlId="exampleForm.SelectCustom"
+                style={{ marginTop: "10px" }}
+              >
                 <Form.Control
                   as="select"
                   onChange={ocDebateTime}
@@ -307,16 +310,26 @@ export default function DebWrite(props) {
           </div>
           <div className="divDiscuss" style={{ width: "100%" }}>
             <label className="labelDiscuss">
-              주장 1 <br />
-              <Form.Control
-                size="lg"
-                type="text"
-                className="inputDiscuss1"
-                name="discuss1"
-                style={{ width: "100%" }}
-                onChange={ocDiscuss1}
-                value={discuss1}
-              />
+              <div className="col">
+                <div className="inputBox">
+                  <Form.Control
+                    type="text"
+                    className="inputDiscuss1"
+                    name="discuss1"
+                    style={{
+                      width: "100%",
+                      textAlign: "center",
+                      fontSize: "15pt",
+                      fontWeight: "800",
+                    }}
+                    onChange={ocDiscuss1}
+                    value={discuss1}
+                    required="required"
+                  />
+                  <span className="text">주장1</span>
+                  <span className="line"></span>
+                </div>
+              </div>
               {/* <input
                 className="inputDiscuss1"
                 name="discuss1"
@@ -327,16 +340,26 @@ export default function DebWrite(props) {
             </label>
             <label className="vs"> VS </label>
             <label className="labelDiscuss">
-              주장 2 <br />
-              <Form.Control
-                size="lg"
-                type="text"
-                className="inputDiscuss2"
-                name="discuss2"
-                style={{ width: "100%" }}
-                onChange={ocDiscuss2}
-                value={discuss2}
-              />
+              <div className="col">
+                <div className="inputBox">
+                  <Form.Control
+                    type="text"
+                    className="inputDiscuss2"
+                    name="discuss2"
+                    style={{
+                      width: "100%",
+                      textAlign: "center",
+                      fontSize: "15pt",
+                      fontWeight: "800",
+                    }}
+                    onChange={ocDiscuss2}
+                    value={discuss2}
+                    required="required"
+                  />
+                  <span className="text">주장2</span>
+                  <span className="line"></span>
+                </div>
+              </div>
               {/* <input
                 className="inputDiscuss2"
                 name="discuss2"
@@ -346,7 +369,7 @@ export default function DebWrite(props) {
               ></input> */}
             </label>
           </div>
-          <div className="divEditor" style={{ minHeight: "00px" }}>
+          <div className="divEditor" style={{ minHeight: "100px" }}>
             <CKEditor
               editor={ClassicEditor}
               data={debate?.debate_content}
