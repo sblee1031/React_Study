@@ -2,7 +2,7 @@ import { useParams, useHistory } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import { Button, Image } from "react-bootstrap";
+import { Button, Image, Spinner, Modal } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import "react-datepicker/dist/react-datepicker.css";
 // import debWri
@@ -33,6 +33,8 @@ export default function DebateView() {
   const history = useHistory();
   const [loading, setLoading] = useState(false);
   const [loginInfo, setLoginInfo] = useState({});
+  // const [requestDate, setRequestDate] = useState(new Date());
+  const [modalShow, setModalShow] = useState(false);
 
   const url = `http://localhost:9999/ta_back/debrecruit/${no}`;
   //console.log("url : ", url);
@@ -250,10 +252,11 @@ export default function DebateView() {
         return res.json();
       })
       .then((response) => {
-        console.log("참여 응답", response);
+        //console.log("참여 응답", response);
         if (response.status == 1) {
-          alert("수정완료");
-          history.push("/ta_front/debrecruit.html");
+          // setRequestDate(new Date());
+          //alert("요청 완료");
+          // history.push("/ta_front/debrecruit.html");
         } else {
           alert("수정실패", response.error);
         }
@@ -261,6 +264,11 @@ export default function DebateView() {
   }
   const discuss1Button = (e) => {
     // console.log("discuss1Button", e);
+    setModalShow(true);
+    setTimeout(() => {
+      setModalShow(false);
+      history.push("/ta_front/debrecruit.html");
+    }, 3000);
     discussFetch(
       "discussor",
       detail[0].detail_no,
@@ -270,6 +278,11 @@ export default function DebateView() {
   };
   const discuss2Button = (e) => {
     // console.log("discuss2Button", e);
+    setModalShow(true);
+    setTimeout(() => {
+      setModalShow(false);
+      history.push("/ta_front/debrecruit.html");
+    }, 3000);
     discussFetch(
       "discussor",
       detail[1].detail_no,
@@ -284,6 +297,7 @@ export default function DebateView() {
       loginInfo.member_no,
       debate.debate_no
     );
+    history.push("/ta_front/debrecruit.html");
   };
   const disCancle2Button = (e) => {
     discussFetch(
@@ -292,6 +306,7 @@ export default function DebateView() {
       loginInfo.member_no,
       debate.debate_no
     );
+    history.push("/ta_front/debrecruit.html");
   };
 
   function login() {
@@ -319,8 +334,8 @@ export default function DebateView() {
     <>
       {/* 로그인 번호 : {loginInfo?.member_no} / {loginInfo?.member_nickName} */}
       {loading ? <div>Loading...</div> : ""}
-      {/* <button onClick={login}>로긴1</button>
-      <button onClick={logo}>버튼</button> */}
+      {/* <button onClick={login}>로긴1</button> */}
+      {/* <button onClick={logout}>버튼</button> */}
       <div className="writeView" style={{ marginTop: "50px" }}>
         <div
           className="divDiscuss"
@@ -380,6 +395,9 @@ export default function DebateView() {
             )}
             {inButton1 && (
               <Button variant="outline-success" onClick={discuss1Button}>
+                {/* <Spinner animation="border" role="status">
+                  <span className="visually-hidden">Loading...</span>
+                </Spinner> */}
                 토론자1 참여
               </Button>
             )}
@@ -519,6 +537,34 @@ export default function DebateView() {
           </Link>
         </div>
       </div>
+      <Modal
+        show={modalShow}
+        size="lg"
+        aria-labelledby="contained-modal-title-vcenter"
+        onHide={() => {
+          return false;
+        }}
+        centered
+      >
+        <Modal.Header>
+          <Modal.Title
+            id="contained-modal-title-vcenter"
+            style={{ textAlign: "center", width: "100%" }}
+          >
+            <h3>잠시만 기다려 주세요.</h3>
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div style={{ textAlign: "center", margin: "20px" }}>
+            <Spinner animation="border" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </Spinner>
+            <h2>
+              <br /> 관리자에게 토론 승인 요청중 입니다.
+            </h2>
+          </div>
+        </Modal.Body>
+      </Modal>
     </>
   );
 }
