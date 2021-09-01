@@ -24,71 +24,69 @@ export default function AdminList(props) {
 
   return (
     <>
-      <div className="container">
-        <h1>관리자 {props.userInfo}님 환영합니다.</h1>
-        <div style={{ display: "inline", textAlign: "right" }}>
-          <h3>
-            게시판 선택
-            <DropdownButton
-              style={{ margin: "20px 20px" }}
-              id="dropdown-basic-button"
-              title="게시판"
+      <h1>관리자 {props.userInfo}님 환영합니다.</h1>
+      <div style={{ display: "inline", textAlign: "right" }}>
+        <h3>
+          게시판 선택
+          <DropdownButton
+            style={{ margin: "20px 20px" }}
+            id="dropdown-basic-button"
+            title="게시판"
+          >
+            <Dropdown.Item
+              onClick={() => {
+                select("notice");
+              }}
             >
-              <Dropdown.Item
-                onClick={() => {
-                  select("notice");
-                }}
-              >
-                공지사항
-              </Dropdown.Item>
-              <Dropdown.Item
-                onClick={() => {
-                  select("board");
-                }}
-              >
-                자유게시판
-              </Dropdown.Item>
-              <Dropdown.Item
-                onClick={() => {
-                  select("debrecruite");
-                }}
-              >
-                토론모집
-              </Dropdown.Item>
-              {/* <Dropdown.Item
+              공지사항
+            </Dropdown.Item>
+            <Dropdown.Item
+              onClick={() => {
+                select("board");
+              }}
+            >
+              자유게시판
+            </Dropdown.Item>
+            <Dropdown.Item
+              onClick={() => {
+                select("debrecruite");
+              }}
+            >
+              토론관리
+            </Dropdown.Item>
+            {/* <Dropdown.Item
                 onClick={() => {
                   select("debbattle");
                 }}
               >
                 토론배틀
               </Dropdown.Item> */}
-              <Dropdown.Item
+            {/* <Dropdown.Item
                 onClick={() => {
                   select("debresult");
                 }}
               >
                 토론결과
-              </Dropdown.Item>
-            </DropdownButton>
-          </h3>
-        </div>
-        <div id="view">
-          <Route path="/ta_front/admin/notice">
-            <Notice userInfo={props.userInfo} />
-          </Route>
-          <Route path="/ta_front/admin/board">
-            <Board userInfo={props.userInfo} />
-          </Route>
-          <Route path="/ta_front/admin/debrecruite">
-            <DebRecruit userInfo={props.userInfo} />
-          </Route>
-          <Route path="/ta_front/admin/debbattle">
-            <DebBattle userInfo={props.userInfo} />
-          </Route>
-          <Route path="/ta_front/admin/debresult">
-            <DebResult userInfo={props.userInfo} />
-          </Route>
-        </div>
+              </Dropdown.Item> */}
+          </DropdownButton>
+        </h3>
+      </div>
+      <div id="view">
+        <Route path="/ta_front/admin/notice">
+          <Notice userInfo={props.userInfo} />
+        </Route>
+        <Route path="/ta_front/admin/board">
+          <Board userInfo={props.userInfo} />
+        </Route>
+        <Route path="/ta_front/admin/debrecruite">
+          <DebRecruit userInfo={props.userInfo} />
+        </Route>
+        <Route path="/ta_front/admin/debbattle">
+          <DebBattle userInfo={props.userInfo} />
+        </Route>
+        <Route path="/ta_front/admin/debresult">
+          <DebResult userInfo={props.userInfo} />
+        </Route>
       </div>
     </>
   );

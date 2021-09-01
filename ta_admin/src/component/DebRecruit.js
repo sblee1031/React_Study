@@ -66,33 +66,39 @@ export default function DebRecruit(props) {
       });
   }, [page, requestData]);
 
-  const replyView = (e) => {
-    const { id } = e.target;
-    const url = "http://localhost:9999/ta_back/boardcomment/list/" + id;
-    console.log("no=>", url);
-
-    fetch(url, {
-      method: "get",
-      headers: { "Content-Type": "application/json" },
-
-      credentials: "include",
-    })
-      .then((res) => {
-        return res.json();
-      })
-      .then((data) => {
-        console.log("--->", data);
-        setReplyList(data.boardcommentlist);
-        setReplyShow(true);
-        // setLoading(false);
-      });
-  };
   const noticeDel = (e) => {
     const { id } = e.target;
+    const url = "http://localhost:9999/ta_back/debrecruit/delete/";
+    console.log("no=>", url);
+    if (window.confirm("삭제 하시겠습니까?")) {
+      fetch(url, {
+        method: "delete",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          debNo: id,
+        }),
+        credentials: "include",
+      })
+        .then((res) => {
+          return res.json();
+        })
+        .then((data) => {
+          console.log("--->", data);
+          setRequestData(new Date());
+          setShow(false);
+          // setLoading(false);
+        });
+    } else {
+      return false;
+    }
+  };
+  const replyView = (e) => {
+    const { id } = e.target;
+
     // console.log("=>", id);
-    const url = "http://localhost:9999/ta_back/admin/board/" + id;
+    const url = "http://localhost:9999/ta_back/resultlist/" + id;
     fetch(url, {
-      method: "DELETE",
+      method: "get",
       credentials: "include",
     })
       .then((res) => {
@@ -100,8 +106,8 @@ export default function DebRecruit(props) {
       })
       .then((data) => {
         console.log("--->", data);
-        setRequestData(new Date());
-        setShow(false);
+        setReplyList(data.commentlist);
+        setReplyShow(true);
         // setLoginInfo(data.logininfo);
         // console.log("로그인정보->", loginInfo);
         // setLoading(false);
@@ -109,13 +115,12 @@ export default function DebRecruit(props) {
   };
   const replyDelete = (e) => {
     const { id } = e.target;
-    const url = "http://localhost:9999/ta_back/boardcomment/" + id;
+    const url = "http://localhost:9999/ta_back/resultlist/resultreply/" + id;
     console.log("no=>", url);
 
     fetch(url, {
       method: "delete",
       headers: { "Content-Type": "application/json" },
-
       credentials: "include",
     })
       .then((res) => {
@@ -124,8 +129,12 @@ export default function DebRecruit(props) {
       .then((data) => {
         console.log("--->", data);
         if (data.status == 1) {
-          alert("삭제 성공");
-          setReplyShow(false);
+          if (window.confirm("삭제 하시겠습니까?")) {
+            setRequestData(new Date());
+            setReplyShow(false);
+          } else {
+            return false;
+          }
         } else if (data.status == 0) {
           alert("삭제 실패", data.msg);
         }
@@ -151,7 +160,9 @@ export default function DebRecruit(props) {
       })
       .then((data) => {
         console.log("--->", data);
-        if (
+        if (data.debate.debate.debate_status === "승인") {
+          alert("이미 승인된 토론입니다.");
+        } else if (
           data.debate.detail[0].discussor?.member_no == null ||
           data.debate.detail[1].discussor?.member_no == null
         ) {
@@ -159,7 +170,6 @@ export default function DebRecruit(props) {
         } else {
           const url = "http://localhost:9999/ta_back/admin/approve/" + id;
           console.log("no=>", url);
-
           fetch(url, {
             method: "put",
             headers: { "Content-Type": "application/json" },
@@ -172,28 +182,49 @@ export default function DebRecruit(props) {
             .then((data) => {
               console.log("--->", data);
               alert("승인");
+              setRequestData(new Date());
             });
         }
       });
   };
+  const disaprove = (e) => {
+    const { id } = e.target;
+    const url = "http://localhost:9999/ta_back/admin/disapprove/" + id;
+    console.log("no=>", url);
+    fetch(url, {
+      method: "put",
+      headers: { "Content-Type": "application/json" },
+
+      credentials: "include",
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        console.log("--->", data);
+        alert("승인 취소");
+        setRequestData(new Date());
+      });
+  };
   return (
     <>
-      <h1>토론모집</h1>
+      <h1>토론관리</h1>
       <Table hover>
         <thead
-          className="table-info"
+          className="table-warning"
           style={{ fontSize: "15pt", fontWeight: "700" }}
         >
           <tr>
             <td style={{ width: "5%" }}>번호</td>
-
             <td style={{ width: "15%" }}>제목</td>
             <td style={{ width: "10%" }}>날짜</td>
             <td style={{ width: "10%" }}>토론시간</td>
             <td style={{ width: "15%" }}>토론일자</td>
-            <td style={{ width: "10%" }}>작성자</td>
+            <td style={{ width: "5%" }}>작성자</td>
             <td style={{ width: "5%" }}>상태</td>
-            <td style={{ width: "15%" }}>작업</td>
+            <td colSpan="3" style={{ width: "20%" }}>
+              작업
+            </td>
           </tr>
         </thead>
         <tbody className="table-light">
@@ -220,23 +251,37 @@ export default function DebRecruit(props) {
               <td>{debate.debate_writer.member_nickName}</td>
               <td>{debate.debate_status}</td>
               <td>
-                <button
-                  className="btn btn-outline-info"
-                  style={{ marginRight: "10px" }}
-                  id={debate.debate_no}
-                  onClick={aprove}
-                >
-                  승인
-                </button>
+                {debate.debate_status === "모집중" ? (
+                  <button
+                    className="btn btn-outline-info"
+                    style={{}}
+                    id={debate.debate_no}
+                    onClick={aprove}
+                  >
+                    승인
+                  </button>
+                ) : (
+                  <button
+                    className="btn btn-outline-info"
+                    style={{}}
+                    id={debate.debate_no}
+                    onClick={disaprove}
+                  >
+                    승인취소
+                  </button>
+                )}
+              </td>
+              <td>
                 <button
                   className="btn btn-outline-success"
-                  style={{ marginRight: "10px" }}
+                  style={{}}
                   id={debate.debate_no}
                   onClick={replyView}
                 >
                   댓글
                 </button>
-
+              </td>
+              <td>
                 <button
                   className="btn btn-outline-danger"
                   id={debate.debate_no}
@@ -343,7 +388,7 @@ export default function DebRecruit(props) {
                   <tr key={list.com_no}>
                     <td>{list.com_no}</td>
                     <td>{list.com_contents}</td>
-                    <td>{list.com_member.member_nickName}</td>
+                    <td>{list.com_mem.member_nickName}</td>
                     <td>
                       <button
                         className="btn btn-danger"

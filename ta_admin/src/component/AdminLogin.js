@@ -34,33 +34,26 @@ export default function AdminLogin(props) {
   };
   return (
     <>
-      <div className="container">
-        <h1>관리자 페이지</h1>
-        <div className="login" style={{ textAlign: "center" }}>
-          <div className="loginBox">
-            <div className="col">
-              <div className="inputBox">
-                <input type="text" name="id" ref={id} required="required" />
-                <span className="text">관리자 아이디</span>
-                <span className="line"></span>
-              </div>
+      <h1>관리자 페이지</h1>
+      <div className="login" style={{ textAlign: "center" }}>
+        <div className="loginBox">
+          <div className="col">
+            <div className="inputBox">
+              <input type="text" name="id" ref={id} required="required" />
+              <span className="text">관리자 아이디</span>
+              <span className="line"></span>
             </div>
-            <div className="col">
-              <div className="inputBox">
-                <input
-                  type="password"
-                  name="pwd"
-                  ref={pwd}
-                  required="required"
-                />
-                <span className="text">비밀번호</span>
-                <span className="line"></span>
-              </div>
-            </div>
-            <button className="btn btn-success loginbutton" onClick={login}>
-              로그인
-            </button>
           </div>
+          <div className="col">
+            <div className="inputBox">
+              <input type="password" name="pwd" ref={pwd} required="required" />
+              <span className="text">비밀번호</span>
+              <span className="line"></span>
+            </div>
+          </div>
+          <button className="btn btn-success loginbutton" onClick={login}>
+            로그인
+          </button>
         </div>
       </div>
     </>

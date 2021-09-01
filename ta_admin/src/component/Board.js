@@ -88,49 +88,56 @@ export default function Board(props) {
   const noticeDel = (e) => {
     const { id } = e.target;
     // console.log("=>", id);
-    const url = "http://localhost:9999/ta_back/admin/board/" + id;
-    fetch(url, {
-      method: "DELETE",
-      credentials: "include",
-    })
-      .then((res) => {
-        return res.json();
+    if (window.confirm("삭제 하시겠습니까?")) {
+      const url = "http://localhost:9999/ta_back/admin/board/" + id;
+      fetch(url, {
+        method: "DELETE",
+        credentials: "include",
       })
-      .then((data) => {
-        console.log("--->", data);
-        setRequestData(new Date());
-        setShow(false);
-        // setLoginInfo(data.logininfo);
-        // console.log("로그인정보->", loginInfo);
-        // setLoading(false);
-      });
+        .then((res) => {
+          return res.json();
+        })
+        .then((data) => {
+          console.log("--->", data);
+          setRequestData(new Date());
+          setShow(false);
+          // setLoginInfo(data.logininfo);
+          // console.log("로그인정보->", loginInfo);
+          // setLoading(false);
+        });
+    } else {
+      return false;
+    }
   };
   const replyDelete = (e) => {
     const { id } = e.target;
     const url = "http://localhost:9999/ta_back/boardcomment/" + id;
     console.log("no=>", url);
+    if (window.confirm("삭제 하시겠습니까?")) {
+      fetch(url, {
+        method: "delete",
+        headers: { "Content-Type": "application/json" },
 
-    fetch(url, {
-      method: "delete",
-      headers: { "Content-Type": "application/json" },
-
-      credentials: "include",
-    })
-      .then((res) => {
-        return res.json();
+        credentials: "include",
       })
-      .then((data) => {
-        console.log("--->", data);
-        if (data.status == 1) {
-          alert("삭제 성공");
-          setReplyShow(false);
-        } else if (data.status == 0) {
-          alert("삭제 실패", data.msg);
-        }
-        //setReplyList(data.list);
-        //setReplyShow(true);
-        // setLoading(false);
-      });
+        .then((res) => {
+          return res.json();
+        })
+        .then((data) => {
+          console.log("--->", data);
+          if (data.status == 1) {
+            alert("삭제 성공");
+            setReplyShow(false);
+          } else if (data.status == 0) {
+            alert("삭제 실패", data.msg);
+          }
+          //setReplyList(data.list);
+          //setReplyShow(true);
+          // setLoading(false);
+        });
+    } else {
+      return false;
+    }
   };
   return (
     <>

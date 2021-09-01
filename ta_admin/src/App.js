@@ -10,14 +10,16 @@ function App() {
   return (
     <BrowserRouter>
       <div className="App">
-        <Switch>
-          <Route path="/ta_front/admin.html">
-            <AdminLogin setUserInfo={setUserInfo} />
-          </Route>
-          <Route path="/ta_front/admin">
-            <AdminList userInfo={userInfo} />
-          </Route>
-        </Switch>
+        <div className="container">
+          <Switch>
+            <Route path="/ta_front/admin.html">
+              <AdminLogin setUserInfo={setUserInfo} />
+            </Route>
+            <Route path="/ta_front/admin">
+              <AdminList userInfo={userInfo} />
+            </Route>
+          </Switch>
+        </div>
       </div>
     </BrowserRouter>
   );

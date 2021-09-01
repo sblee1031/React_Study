@@ -67,22 +67,26 @@ export default function Notice(props) {
   const noticeDel = (e) => {
     const { id } = e.target;
     // console.log("=>", id);
-    const url = "http://localhost:9999/ta_back/notice/" + id;
-    fetch(url, {
-      method: "DELETE",
-      credentials: "include",
-    })
-      .then((res) => {
-        return res.json();
+    if (window.confirm("삭제 하시겠습니까?")) {
+      const url = "http://localhost:9999/ta_back/notice/" + id;
+      fetch(url, {
+        method: "DELETE",
+        credentials: "include",
       })
-      .then((data) => {
-        //console.log("--->", data);
-        setRequestData(new Date());
-        setShow(false);
-        // setLoginInfo(data.logininfo);
-        // console.log("로그인정보->", loginInfo);
-        // setLoading(false);
-      });
+        .then((res) => {
+          return res.json();
+        })
+        .then((data) => {
+          //console.log("--->", data);
+          setRequestData(new Date());
+          setShow(false);
+          // setLoginInfo(data.logininfo);
+          // console.log("로그인정보->", loginInfo);
+          // setLoading(false);
+        });
+    } else {
+      return false;
+    }
   };
 
   const noticeWrite = () => {
@@ -196,8 +200,12 @@ export default function Notice(props) {
       .then((data) => {
         console.log("--->", data);
         if (data.status == 1) {
-          alert("삭제 성공");
-          setReplyShow(false);
+          if (window.confirm("삭제 하시겠습니까?")) {
+            alert("삭제 성공");
+            setReplyShow(false);
+          } else {
+            return false;
+          }
         } else if (data.status == 0) {
           alert("삭제 실패", data.msg);
         }
