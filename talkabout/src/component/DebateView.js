@@ -354,7 +354,11 @@ export default function DebateView() {
               fontWeight: "800",
             }}
           >
-            <label>작성자: {debWriter}</label>
+            <label
+              style={{ marginTop: "20px", fontWeight: "800", fontSize: "15pt" }}
+            >
+              작성자: {debWriter}
+            </label>
             <Image
               src={thumnail}
               style={{ height: "50px", marginLeft: "20px" }}
@@ -362,7 +366,11 @@ export default function DebateView() {
               roundedCircle
             />
 
-            <label>작성시간 : {writeDate}</label>
+            <label
+              style={{ marginTop: "20px", fontWeight: "800", fontSize: "15pt" }}
+            >
+              작성시간 : {writeDate}
+            </label>
           </div>
           <label className="labelDiscuss" style={{ width: "20%" }}>
             주장 1 <br />
@@ -370,7 +378,14 @@ export default function DebateView() {
               className="inputDiscuss1"
               name="discuss1"
               value={discuss1}
-              style={{ textAlign: "center", width: "100%" }}
+              style={{
+                textAlign: "center",
+                marginTop: "10px",
+                marginBottom: "10px",
+                width: "100%",
+                border: "none",
+                borderBottom: "3px solid #1890ff",
+              }}
               readOnly
             ></input>
             {discussor1?.member_nickName ? (
@@ -412,7 +427,14 @@ export default function DebateView() {
               className="inputDiscuss2"
               name="discuss2"
               value={discuss2}
-              style={{ textAlign: "center", width: "100%" }}
+              style={{
+                textAlign: "center",
+                marginTop: "10px",
+                marginBottom: "10px",
+                width: "100%",
+                border: "none",
+                borderBottom: "3px solid #1890ff",
+              }}
               readOnly
             ></input>
             {discussor2?.member_nickName ? (
@@ -449,21 +471,45 @@ export default function DebateView() {
               margin: "0px 10px",
             }}
           >
-            <label style={{ marginBottom: "10px", fontWeight: "600" }}>
+            <label
+              style={{
+                marginBottom: "10px",
+                fontWeight: "800",
+                fontSize: "14pt",
+              }}
+            >
               토론일자 :
               <input
                 className="debDate"
                 value={debDate}
-                style={{ textAlign: "center", marginLeft: "10px" }}
+                style={{
+                  textAlign: "center",
+                  marginLeft: "10px",
+                  marginBottom: "10px",
+                  border: "none",
+                  borderBottom: "3px solid #1890ff",
+                }}
                 readOnly
               ></input>
             </label>
-            <label style={{ marginBottom: "10px", fontWeight: "600" }}>
+            <label
+              style={{
+                marginBottom: "10px",
+                fontWeight: "800",
+                fontSize: "14pt",
+              }}
+            >
               토론시간 :
               <input
                 className="debTime"
                 value={debTime}
-                style={{ textAlign: "center", marginLeft: "10px" }}
+                style={{
+                  textAlign: "center",
+                  marginLeft: "10px",
+                  marginBottom: "10px",
+                  border: "none",
+                  borderBottom: "3px solid #1890ff",
+                }}
                 readOnly
               ></input>
             </label>
