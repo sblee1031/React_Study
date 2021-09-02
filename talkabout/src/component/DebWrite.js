@@ -57,7 +57,7 @@ export default function DebWrite(props) {
         setButtonState(false);
         setDiscuss1(detail[0]?.discuss);
         setDiscuss2(detail[1]?.discuss);
-        setDebateTime(debate?.debate_time);
+        setDebateTime(debate?.debate_time + "");
         setEditData(debate?.debate_content);
         // console.log("setDebateDate", new Date(debate?.debate_startDate));
         setDebateDate(new Date(debate?.debate_startDate));
@@ -112,7 +112,7 @@ export default function DebWrite(props) {
       };
       // const detail = { discuss: discuss1 };
       //const data = { Debate, detail };
-      //console.log(data);
+      //console.log("작성하기=>", Debate);
 
       const url = `http://localhost:9999/ta_back/debrecruit/write`;
       fetch(url, {
@@ -168,6 +168,7 @@ export default function DebWrite(props) {
       };
 
       const url = `http://localhost:9999/ta_back/debrecruit/update`;
+      // console.log("수정내용=>", Debate);
       fetch(url, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -291,9 +292,9 @@ export default function DebWrite(props) {
                   value={debateTime}
                   custom
                 >
-                  <option value="30">30분</option>
-                  <option value="60">60분</option>
-                  <option value="120">120분</option>
+                  <option value={30}>30분</option>
+                  <option value={60}>60분</option>
+                  <option value={120}>120분</option>
                 </Form.Control>
               </Form.Group>
               {/* <select

@@ -5,6 +5,8 @@ import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { Button, Image, Spinner, Modal } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import "react-datepicker/dist/react-datepicker.css";
+import "./css/debateView.css";
+
 // import debWri
 
 export default function DebateView() {
@@ -334,6 +336,11 @@ export default function DebateView() {
     <>
       {/* 로그인 번호 : {loginInfo?.member_no} / {loginInfo?.member_nickName} */}
       {loading ? <div>Loading...</div> : ""}
+      {
+        // <Circle className="test" styled={Circle}>
+        //   Loading...
+        // </Circle>
+      }
       {/* <button onClick={login}>로긴1</button> */}
       {/* <button onClick={logout}>버튼</button> */}
       <div className="writeView" style={{ marginTop: "50px" }}>
@@ -374,20 +381,19 @@ export default function DebateView() {
           </div>
           <label className="labelDiscuss" style={{ width: "20%" }}>
             주장 1 <br />
-            <input
-              className="inputDiscuss1"
-              name="discuss1"
-              value={discuss1}
-              style={{
-                textAlign: "center",
-                marginTop: "10px",
-                marginBottom: "10px",
-                width: "100%",
-                border: "none",
-                borderBottom: "3px solid #1890ff",
-              }}
-              readOnly
-            ></input>
+            <p>
+              <input
+                className="inputDiscuss1"
+                name="discuss1"
+                value={discuss1}
+                style={{
+                  textAlign: "center",
+                  width: "100%",
+                  border: "none",
+                }}
+                readOnly
+              ></input>
+            </p>
             {discussor1?.member_nickName ? (
               <p style={{ marginTop: "10px", fontSize: "17pt" }}>
                 토론자 : {discussor1?.member_nickName}
@@ -399,10 +405,18 @@ export default function DebateView() {
                 />
               </p>
             ) : (
-              <p style={{ fontSize: "15pt", margin: "5px", color: "red" }}>
+              <p
+                style={{
+                  fontSize: "15pt",
+                  margin: "5px",
+                  color: "red",
+                  marginBottom: "10px",
+                }}
+              >
                 참여가능
               </p>
             )}
+            <br />
             {outButton1 && (
               <Button variant="warning" onClick={disCancle1Button}>
                 참여취소
@@ -423,20 +437,19 @@ export default function DebateView() {
           </label>
           <label className="labelDiscuss" style={{ width: "20%" }}>
             주장 2 <br />
-            <input
-              className="inputDiscuss2"
-              name="discuss2"
-              value={discuss2}
-              style={{
-                textAlign: "center",
-                marginTop: "10px",
-                marginBottom: "10px",
-                width: "100%",
-                border: "none",
-                borderBottom: "3px solid #1890ff",
-              }}
-              readOnly
-            ></input>
+            <p>
+              <input
+                className="inputDiscuss2"
+                name="discuss2"
+                value={discuss2}
+                style={{
+                  textAlign: "center",
+                  width: "100%",
+                  border: "none",
+                }}
+                readOnly
+              ></input>
+            </p>
             {discussor2?.member_nickName ? (
               <p style={{ marginTop: "10px", fontSize: "17pt" }}>
                 토론자 : {discussor2?.member_nickName}
@@ -448,10 +461,18 @@ export default function DebateView() {
                 />
               </p>
             ) : (
-              <p style={{ fontSize: "15pt", margin: "5px", color: "red" }}>
+              <p
+                style={{
+                  fontSize: "15pt",
+                  margin: "5px",
+                  color: "red",
+                  marginBottom: "10px",
+                }}
+              >
                 참여 가능
               </p>
             )}
+            <br />
             {outButton2 && (
               <Button variant="warning" onClick={disCancle2Button}>
                 참여취소
@@ -463,55 +484,62 @@ export default function DebateView() {
               </Button>
             )}
           </label>
+
           <div
             className="debInfo"
             style={{
               display: "inline-block",
               width: "25%",
-              margin: "0px 10px",
+              textAlign: "left",
+              paddingLeft: "50px",
             }}
           >
             <label
+              className="labelDiscuss"
               style={{
-                marginBottom: "10px",
-                fontWeight: "800",
+                marginBottom: "5px",
+                fontWeight: "900",
                 fontSize: "14pt",
               }}
             >
-              토론일자 :
-              <input
-                className="debDate"
-                value={debDate}
-                style={{
-                  textAlign: "center",
-                  marginLeft: "10px",
-                  marginBottom: "10px",
-                  border: "none",
-                  borderBottom: "3px solid #1890ff",
-                }}
-                readOnly
-              ></input>
+              <p>
+                토론일자
+                <input
+                  className="debDate"
+                  value={debDate}
+                  style={{
+                    textAlign: "center",
+                    marginLeft: "10px",
+                    marginTop: "5px",
+                    border: "none",
+                  }}
+                  readOnly
+                ></input>
+              </p>
             </label>
+            <br />
             <label
+              className="labelDiscuss"
               style={{
                 marginBottom: "10px",
-                fontWeight: "800",
+                fontWeight: "900",
                 fontSize: "14pt",
               }}
             >
-              토론시간 :
-              <input
-                className="debTime"
-                value={debTime}
-                style={{
-                  textAlign: "center",
-                  marginLeft: "10px",
-                  marginBottom: "10px",
-                  border: "none",
-                  borderBottom: "3px solid #1890ff",
-                }}
-                readOnly
-              ></input>
+              <p>
+                토론시간
+                <input
+                  className="debTime"
+                  value={debTime + "분"}
+                  style={{
+                    textAlign: "center",
+                    marginLeft: "10px",
+                    marginTop: "5px",
+                    border: "none",
+                  }}
+                  readOnly
+                ></input>
+              </p>
             </label>
           </div>
         </div>
