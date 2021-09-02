@@ -1,11 +1,4 @@
-import {
-  Table,
-  Modal,
-  InputGroup,
-  FormControl,
-  Dropdown,
-  DropdownButton,
-} from "react-bootstrap";
+import { Table, Modal, InputGroup, Spinner } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Paging from "./pagination/Paging";
@@ -28,7 +21,7 @@ export default function DebRecruit(props) {
   const [noticeNo, setNoticeNo] = useState();
   const [replyShow, setReplyShow] = useState();
   const [replyList, setReplyList] = useState();
-
+  const [approveShow, setApproveShow] = useState(false);
   const [url, setUrl] = useState(
     `http://localhost:9999/ta_back/debrecruit/list?pageNo=${page}&pageSize=${pageSize}`
   );
@@ -168,6 +161,10 @@ export default function DebRecruit(props) {
         ) {
           alert("토론자가 비었습니다.");
         } else {
+          setApproveShow(true);
+          setTimeout(() => {
+            setApproveShow(false);
+          }, 3000);
           const url = "http://localhost:9999/ta_back/admin/approve/" + id;
           console.log("no=>", url);
           fetch(url, {
@@ -405,6 +402,34 @@ export default function DebRecruit(props) {
           </Modal.Body>
         </Modal>
       </div>
+      <Modal
+        show={approveShow}
+        size="lg"
+        aria-labelledby="contained-modal-title-vcenter"
+        onHide={() => {
+          return false;
+        }}
+        centered
+      >
+        <Modal.Header>
+          <Modal.Title
+            id="contained-modal-title-vcenter"
+            style={{ textAlign: "center", width: "100%" }}
+          >
+            <h3>잠시만 기다려 주세요.</h3>
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div style={{ textAlign: "center", margin: "20px" }}>
+            <Spinner animation="border" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </Spinner>
+            <h2>
+              <br /> 토론자에게 승인 메일 발송중 입니다.
+            </h2>
+          </div>
+        </Modal.Body>
+      </Modal>
     </>
   );
 }
