@@ -1,28 +1,31 @@
-import { useRef, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Table, button, Image } from "react-bootstrap";
 import "./css/battle.css";
 import ApiService from "../ApiService";
 import SockJsClient from "react-stomp";
 
-import { Button, TextField, Grid, Typography } from "@material-ui/core";
+import { Grid, Typography } from "@material-ui/core";
 
 export default function DebateBattleDetail(props) {
-  // console.log("detail-logininfo : ", props.logininfo);
-  const debate = props?.location?.state.debate;
-  const logininfo = props?.location?.state.logininfo;
-  const [debDetail, setDebDetail] = useState();
+  const [debate] = useState(props?.location?.state.debate);
+  const [logininfo] = useState(props?.location?.state.logininfo);
+  const [debateDetail, setdebateDetail] = useState();
 
-  console.log("상속 데이터 : ", props.location.state.debate);
-
-  const [name] = useState(logininfo?.member_nickName); // logininfo?.member_nickName
-  console.log("이름 : ", name);
+  const [name] = useState(logininfo?.member_nickName);
   const [room] = useState(debate.debate_no);
-  const [topics, setTopics] = useState([`/topic/${room}`]);
+  const [topics] = useState([`/topic/${room}`]);
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const [messages2, setMessages2] = useState([]);
   const [clientRef, setClientRef] = useState();
-  const [inputMessage, setInputMessage] = useState("");
+
+  useEffect(() => {
+    console.log("useEffect 가동");
+    ApiService.fetchDiscussors(debate.debate_no).then((res) => {
+      console.log("res : ", res);
+      setdebateDetail(res.data.list);
+    });
+  }, []);
 
   const sendMessage = () => {
     clientRef.sendMessage(
@@ -36,13 +39,20 @@ export default function DebateBattleDetail(props) {
     setMessage("");
   };
 
-  useEffect(() => {
-    ApiService.fetchDiscussors(debate.debate_no).then((res) => {
-      setDebDetail(res.data.list);
-    });
-  }, []);
-
-  console.log("디테일 : ", debDetail);
+  // 근거 버튼 등록
+  const btn_A1 = (e) => {
+    if (debateDetail[0].discussor.member_nickName == name) {
+      const params = {
+        detail_no: debateDetail[0].detail_no,
+        word: "evidence",
+        evi_no: 1,
+        setdata: "",
+      };
+      ApiService.editDetail(params);
+    } else {
+      alert("토론자 A만 수정 가능");
+    }
+  };
 
   return (
     <>
@@ -55,14 +65,19 @@ export default function DebateBattleDetail(props) {
                   <div>
                     <Image
                       src={
-                        "http://k.kakaocdn.net/dn/E1SPk/btq7PTNrZT0/Kd0PxOFVNqK7F8w6M6wRaK/img_640x640.jpg"
+                        debateDetail
+                          ? debateDetail[0].discussor.member_thumb
+                          : ""
                       }
                       style={{ height: "120px", marginLeft: "20px" }}
                       alt={"썸네일"}
                       roundedCircle
                     />
                     <br></br>
-                    토론자 A : {"앙리"}
+                    토론자 A :{" "}
+                    {debateDetail
+                      ? debateDetail[0].discussor.member_nickName
+                      : ""}
                   </div>
                 </td>
               </tr>
@@ -114,7 +129,7 @@ export default function DebateBattleDetail(props) {
               <tr>
                 <td colSpan="3">
                   <div id="" className="battle_topic">
-                    호날두 vs 메시
+                    {debate.debate_topic}
                   </div>
                 </td>
               </tr>
@@ -123,14 +138,15 @@ export default function DebateBattleDetail(props) {
               <tr>
                 <td colSpan="3">
                   <div id="" className="battle-timer">
-                    00:00<span className="sec-style">:00</span>
+                    {debate.debate_time}분
                   </div>
                 </td>
               </tr>
               <tr>
                 <td colSpan="3">
                   <div className="battle_vote">
-                    호날두 XX% / 중립 XX% / 메시 XX%
+                    {debateDetail ? debateDetail[0].discuss : ""}XX% / 중립 XX%
+                    / {debateDetail ? debateDetail[1].discuss : ""} XX%
                   </div>
                 </td>
               </tr>
@@ -149,7 +165,7 @@ export default function DebateBattleDetail(props) {
                     <div style={{}}>
                       {messages.map((e, i) => {
                         return e.name ==
-                          debDetail[0].discussor.member_nickName ? (
+                          debateDetail[0]?.discussor.member_nickName ? (
                           <div className="discussor1message" key={i}>
                             {e.server ? (
                               <Grid
@@ -353,14 +369,19 @@ export default function DebateBattleDetail(props) {
                   <div>
                     <Image
                       src={
-                        "http://k.kakaocdn.net/dn/bqciso/btq4dKTf6Qu/NX3jJ6l74awvHHKr32vCRK/img_640x640.jpg"
+                        debateDetail
+                          ? debateDetail[1].discussor.member_thumb
+                          : ""
                       }
                       style={{ height: "120px", marginLeft: "20px" }}
                       alt={"썸네일"}
                       roundedCircle
                     />
                     <br></br>
-                    토론자 B : {"앙리"}
+                    토론자 B :{" "}
+                    {debateDetail
+                      ? debateDetail[1].discussor.member_nickName
+                      : ""}
                   </div>
                 </td>
               </tr>
@@ -428,8 +449,8 @@ export default function DebateBattleDetail(props) {
           // console.log(e)
           // 토론자일 경우
           if (
-            name == debDetail[0].discussor.member_nickName ||
-            name == debDetail[1].discussor.member_nickName
+            name == debateDetail[0].discussor.member_nickName ||
+            name == debateDetail[1].discussor.member_nickName
           ) {
             const temp = [...messages];
             temp.push(e);
