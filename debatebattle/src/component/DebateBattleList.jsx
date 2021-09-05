@@ -38,29 +38,26 @@ export default function DebateBattleList(props) {
         return data.debate_topic.search(word) !== -1;
       });
       setDebList(result);
-      // setFilter(result);
     } else {
       e.preventDefault();
       alert("검색어를 입력해주세요");
     }
   };
-  // const login = (props) => {
-  //   props.setLoginInfo();
-  // };
+
   useEffect(() => {
     ApiService.fetchDebates().then((res) => {
-      // console.log(res);
       setDebList(res.data.list);
       // console.log(props);
-      props.setLoginInfo(res.data.logininfo);
+      // props.setLoginInfo(res.data.logininfo);
       setLogininfo(res.data.logininfo);
     });
   }, []);
+
   //로그인 테스트
   function login() {
     // const mem = { member_social_no: "118153287897731040607" };
     fetch(
-      "http://localhost:9999/ta_back/member/login?socialNo=118153287897731040607",
+      "http://localhost:9999/ta_back/member/login?socialNo=1775421132_112",
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -69,17 +66,12 @@ export default function DebateBattleList(props) {
       }
     )
       .then((res) => {
+        // console.log("로그인 : ", res.json());
         return res.json();
       })
       .then((data) => {
-        // setLoginInfo(data.member);
-        console.log("login--->", data);
-        // console.log("로그인완료", loginInfo);
-        // if (loginInfo) {
-        //   setwriteButton(writeButton);
-        // } else {
-        //   setwriteButton(false);
-        // }
+        setLogininfo(data.member);
+        console.log("login--->", data.member);
       });
   }
 
@@ -99,17 +91,10 @@ export default function DebateBattleList(props) {
       .then((data) => {
         // setLoginInfo(data.member);
         console.log("logout--->", data);
-
-        // history.push("/ta_front/debrecruit.html");
-        // console.log("로그인완료", loginInfo);
-        // if (loginInfo) {
-        //   setwriteButton(writeButton);
-        // } else {
-        //   setwriteButton(false);
-        // }
       });
   }
   //로그인 테스트 끝
+
   return (
     <>
       <button onClick={login}>로긴81</button>
@@ -180,7 +165,7 @@ export default function DebateBattleList(props) {
                 <Link
                   to={{
                     pathname: `/ta_front/debbattle/${debate.debate_no}`,
-                    state: { debate: debate, logininfo: logininfo },
+                    state: { debate: debate, logininfo: logininfo }, //
                   }}
                 >
                   {debate.debate_topic}
