@@ -66,7 +66,7 @@ export default function DebateList() {
         // setLoading(false);
       });
   }, [url]);
-
+  const history = useHistory();
   function login() {
     // const mem = { member_social_no: "118153287897731040607" };
     fetch(
@@ -94,7 +94,7 @@ export default function DebateList() {
         }
       });
   }
-  const history = useHistory();
+
   function logout() {
     // const mem = { member_social_no: "118153287897731040607" };
     fetch("http://localhost:9999/ta_back/member/logout", {

@@ -341,7 +341,7 @@ export default function DebateView() {
         //   Loading...
         // </Circle>
       }
-      {/* <button onClick={login}>로긴1</button> */}
+      <button onClick={login}>로긴1</button>
       {/* <button onClick={logout}>버튼</button> */}
       <div className="writeView" style={{ marginTop: "50px" }}>
         <div
