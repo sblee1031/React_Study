@@ -161,7 +161,7 @@ export default function Portfolio2() {
         alt=""
         onClick={() => handleClick()}
       />
-      <a className="next" href="#portfolio2">
+      <a className="next" href="#more">
         <img src="assets/down.png" alt="" />
       </a>
     </div>

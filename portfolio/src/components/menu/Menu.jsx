@@ -17,7 +17,7 @@ export default function Menu({ menuOpen, setMenuOpen }) {
           <a href="#portfolio2">토론 커뮤니티</a>
         </li>
         <li onClick={() => setMenuOpen(false)}>
-          <a href="#github">Github</a>
+          <a href="#more">More</a>
         </li>
       </ul>
     </div>

@@ -3,12 +3,12 @@ import Intro from "./components/intro/Intro";
 
 import Portfolio1 from "./components/portfolio1/Portfolio1";
 import Portfolio2 from "./components/portfolio2/Portfolio2";
-import Contact from "./components/contact/Contact";
+
 import "./app.scss";
 import { useState } from "react";
 import Menu from "./components/menu/Menu";
 import Aboutme from "./components/aboutme/Aboutme";
-import Github from "./components/github/Github";
+import More from "./components/more/More";
 
 function App() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -21,7 +21,7 @@ function App() {
         <Aboutme />
         <Portfolio1 />
         <Portfolio2 />
-        <Github />
+        <More />
         {/* <Works />
         <Testimonials /> */}
         {/* <Contact /> */}

@@ -94,6 +94,10 @@
           &.oracle {
             height: 100px;
           }
+          @include mobile {
+            width: 30px;
+            height: 30px;
+          }
         }
       }
       .info {
