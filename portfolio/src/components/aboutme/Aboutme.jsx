@@ -48,7 +48,7 @@ export default function Aboutme() {
             </div>
             <div className="itemcontainer">
               <PhoneAndroid className="icon" />
-              <span>전화 : 010-6853-4321</span>
+              <span>전화 : - </span>
             </div>
             <div className="certificate">
               <h2>Certificate</h2>
