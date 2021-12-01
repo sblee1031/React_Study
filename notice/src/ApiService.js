@@ -1,7 +1,8 @@
 import axios from 'axios';
 
-const NOTICE_URL = "http://localhost:9999/ta_back/notice";
-const NC_URL = "http://localhost:9999/ta_back/noticecomment";
+const BACK_URL = "http://59.9.223.1:39999/ta_back"
+const NOTICE_URL = BACK_URL+"/notice";
+const NC_URL = BACK_URL+"/noticecomment";
 
 class ApiService {
     fetchNotices() {
