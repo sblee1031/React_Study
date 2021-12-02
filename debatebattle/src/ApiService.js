@@ -1,8 +1,8 @@
 import axios from "axios";
-
-const AUDIENCE_URL = "http://localhost:9999/ta_back/debbattle/audience";
-const DEBATE_URL = "http://localhost:9999/ta_back/debbattle/debate";
-const DETAIL_URL = "http://localhost:9999/ta_back/debbattle/debatedetail";
+const BACK_URL = "http://59.9.223.1:39999/ta_back"
+const AUDIENCE_URL = BACK_URL+"/debbattle/audience";
+const DEBATE_URL = BACK_URL+"/debbattle/debate";
+const DETAIL_URL = BACK_URL+"/debbattle/debatedetail";
 
 class ApiService {
   /*

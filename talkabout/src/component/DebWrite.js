@@ -20,7 +20,7 @@ export default function DebWrite(props) {
   const [buttonState, setButtonState] = useState();
   // const editDiscuss1 = detail[0]?.discuss;
   // const editDiscuss2 = detail[1]?.discuss;
-
+  const BACK_URL = "http://59.9.223.1:39999/ta_back";
   const [editData, setEditData] = useState("");
   // const [ckeditor, setCkeditor] = useState({}); //ckeditor 객체
 
@@ -114,7 +114,7 @@ export default function DebWrite(props) {
       //const data = { Debate, detail };
       //console.log("작성하기=>", Debate);
 
-      const url = `http://localhost:9999/ta_back/debrecruit/write`;
+      const url = BACK_URL+`/debrecruit/write`;
       fetch(url, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -167,7 +167,7 @@ export default function DebWrite(props) {
         debateTime: debateTime,
       };
 
-      const url = `http://localhost:9999/ta_back/debrecruit/update`;
+      const url = BACK_URL+`/debrecruit/update`;
       // console.log("수정내용=>", Debate);
       fetch(url, {
         method: "PUT",
@@ -221,7 +221,7 @@ export default function DebWrite(props) {
   function login() {
     // const mem = { member_social_no: "118153287897731040607" };
     fetch(
-      "http://localhost:9999/ta_back/member/login?socialNo=118153287897731040607",
+      BACK_URL+"/member/login?socialNo=118153287897731040607",
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },

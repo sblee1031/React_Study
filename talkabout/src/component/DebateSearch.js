@@ -5,13 +5,14 @@ import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 
 export default function DebateSearch() {
+  const BACK_URL = "http://59.9.223.1:39999/ta_back";
   const { word } = useParams();
   console.log("-->", { word });
   const [list, setList] = useState({});
   //const [status, setStatus] = useState();
   const pageNo = 1;
   const pageSize = 5;
-  const url = `http://localhost:9999/ta_back/debrecruit/list/${word}?start=${pageNo}&end=${pageSize}`;
+  const url = BACK_URL+`/debrecruit/list/${word}?start=${pageNo}&end=${pageSize}`;
   //console.log("url : ", url);
   useEffect(() => {
     fetch(url, {

@@ -8,6 +8,7 @@ import { Grid, Typography } from "@material-ui/core";
 import axios from "axios";
 
 export default function DebateBattleDetail(props) {
+  const BACK_URL = "http://59.9.223.1:39999/ta_back";
   const [debate] = useState(props?.location?.state.debate);
   const [logininfo] = useState(props?.location?.state.logininfo);
   const [debateDetail, setdebateDetail] = useState();
@@ -703,7 +704,7 @@ export default function DebateBattleDetail(props) {
         </div>
       </div>
       <SockJsClient
-        url="http://localhost:9999/ta_back/websocket-chat/"
+        url="http://59.9.223.1:39999/ta_back/websocket-chat/"
         topics={topics}
         onConnect={() => {
           console.log("connected");

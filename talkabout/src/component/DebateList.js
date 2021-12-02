@@ -14,12 +14,12 @@ export default function DebateList() {
   const pageSize = 5;
   // const [loading, setLoading] = useState(true);
   const [searchAlert, setSearchAlert] = useState(false);
-
+  const BACK_URL = "http://59.9.223.1:39999/ta_back";
   //const pageNo = page;
   //console.log(pageNo);
   const [word, setWord] = useState();
   const [url, setUrl] = useState(
-    `http://localhost:9999/ta_back/debrecruit/list?pageNo=${page}&pageSize=${pageSize}`
+    BACK_URL+`/debrecruit/list?pageNo=${page}&pageSize=${pageSize}`
   );
   const search = (e) => {
     setWord(e.target.value);
@@ -36,8 +36,8 @@ export default function DebateList() {
     }
   };
   function setPage1(page) {
-    const listUrl = `http://localhost:9999/ta_back/debrecruit/list?pageNo=${page}&pageSize=${pageSize}`;
-    const searchUrl = `http://localhost:9999/ta_back/debrecruit/list/${word}?pageNo=${page}&pageSize=${pageSize}`;
+    const listUrl = BACK_URL+`/debrecruit/list?pageNo=${page}&pageSize=${pageSize}`;
+    const searchUrl = BACK_URL+`/debrecruit/list/${word}?pageNo=${page}&pageSize=${pageSize}`;
     // console.log(url);
     // console.log(page);
     if (word) {
@@ -70,7 +70,7 @@ export default function DebateList() {
   function login() {
     // const mem = { member_social_no: "118153287897731040607" };
     fetch(
-      "http://localhost:9999/ta_back/member/login?socialNo=118153287897731040607",
+      BACK_URL+"/member/login?socialNo=118153287897731040607",
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -97,7 +97,7 @@ export default function DebateList() {
 
   function logout() {
     // const mem = { member_social_no: "118153287897731040607" };
-    fetch("http://localhost:9999/ta_back/member/logout", {
+    fetch(BACK_URL+"/ta_back/member/logout", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

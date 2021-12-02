@@ -9,6 +9,7 @@ import Pagination from "./pagination/DebatePaging";
 import { paginate } from "./pagination/paginate";
 
 export default function DebateBattleList(props) {
+  const BACK_URL = "http://59.9.223.1:39999/ta_back";
   const [deblist, setDebList] = useState();
   const [word, setWord] = useState();
   const [currentPage, setCurpage] = useState(1);
@@ -57,7 +58,7 @@ export default function DebateBattleList(props) {
   function login() {
     // const mem = { member_social_no: "118153287897731040607" };
     fetch(
-      "http://localhost:9999/ta_back/member/login?socialNo=11815328789773104060243",
+      BACK_URL+"/member/login?socialNo=11815328789773104060243",
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -77,7 +78,7 @@ export default function DebateBattleList(props) {
 
   function login2() {
     // const mem = { member_social_no: "118153287897731040607" };
-    fetch("http://localhost:9999/ta_back/member/login?socialNo=1775421132_1", {
+    fetch(BACK_URL+"/member/login?socialNo=1775421132_1", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
 
@@ -94,7 +95,7 @@ export default function DebateBattleList(props) {
   }
   function login3() {
     // const mem = { member_social_no: "118153287897731040607" };
-    fetch("http://localhost:9999/ta_back/member/login?socialNo=1775421132_11", {
+    fetch(BACK_URL+"/member/login?socialNo=1775421132_11", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
 
@@ -113,7 +114,7 @@ export default function DebateBattleList(props) {
 
   function logout() {
     // const mem = { member_social_no: "118153287897731040607" };
-    fetch("http://localhost:9999/ta_back/member/logout", {
+    fetch(BACK_URL+"/member/logout", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

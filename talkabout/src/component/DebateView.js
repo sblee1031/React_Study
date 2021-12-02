@@ -37,8 +37,8 @@ export default function DebateView() {
   const [loginInfo, setLoginInfo] = useState({});
   // const [requestDate, setRequestDate] = useState(new Date());
   const [modalShow, setModalShow] = useState(false);
-
-  const url = `http://localhost:9999/ta_back/debrecruit/${no}`;
+  const BACK_URL = "http://59.9.223.1:39999/ta_back";
+  const url = BACK_URL+`/debrecruit/${no}`;
   //console.log("url : ", url);
   useEffect(() => {
     setLoading(true);
@@ -215,7 +215,7 @@ export default function DebateView() {
 
   const debDelete = () => {
     // console.log("삭제");
-    const url = "http://localhost:9999/ta_back/debrecruit/delete";
+    const url = BACK_URL+"/debrecruit/delete";
     fetch(url, {
       method: "DELETE",
       headers: {
@@ -237,7 +237,7 @@ export default function DebateView() {
       });
   };
   function discussFetch(method, dd_no, member_no, deb_no) {
-    const url = "http://localhost:9999/ta_back/debrecruit/";
+    const url = BACK_URL+"/debrecruit/";
     fetch(url + method, {
       method: "PUT",
       headers: {
@@ -314,7 +314,7 @@ export default function DebateView() {
   function login() {
     // console.log(history);
     const social = "37612893746";
-    fetch("http://localhost:9999/ta_back/member/login?socialNo=" + social, {
+    fetch(BACK_URL+"/member/login?socialNo=" + social, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -341,7 +341,7 @@ export default function DebateView() {
         //   Loading...
         // </Circle>
       }
-      <button onClick={login}>로긴1</button>
+      {/* <button onClick={login}>로긴1</button> */}
       {/* <button onClick={logout}>버튼</button> */}
       <div className="writeView" style={{ marginTop: "50px" }}>
         <div
