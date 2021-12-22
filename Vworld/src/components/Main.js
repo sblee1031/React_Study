@@ -30,7 +30,7 @@ const polyline = [
   ]
 
 const i = polyline.length;
-const center = polyline[8];
+const center = polyline[1];
 
 
 function Main () {

@@ -1,6 +1,6 @@
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import { useState,useEffect } from 'react';
+import { useState, useEffect,useRef} from 'react';
 import { MapContainer, TileLayer, Marker, Popup, Polyline, LayersControl} from 'react-leaflet';
 
 
@@ -15,36 +15,47 @@ function Map(props){
     const [polyline, setPolyline] = useState(props.polyline);
     const [center, setCenter] = useState(props.center);
     const [render, setRender] = useState(true);
-
-    useEffect(() => {
-        function aaa() {
-            var i = polyline.length;
+    const [timer, setTimer] = useState(false);
+    const [stop, setStop] = useState(false);
+    var i = polyline.length;
+    const timerId = useRef();
+        useEffect(() => {
             
-            function b(){
-                var center = polyline[i-1];
-                console.log('center',center);
-                setCenter(center);
-                i--;
-                //console.log('i->',i, polyline[i-1]);
-                if(i==0){
-                    clearInterval(testTimer);
-                    console.log('타이머정지');
-                }
+            if(timer){
+                timerId.current = setInterval(()=>{
+                        var center = polyline[i-1];
+                        console.log('center',center);
+                        setCenter(center);
+                        i--;
+                            if(i==0){
+                            clearInterval(timerId.current);
+                            setTimer(false);
+                            console.log('타이머정지');
+                            }
+                }, 1000);
             }
-            const testTimer = setInterval(b, 1000);
-            //console.log('1->',i);
-            //console.log(a);
-            //console.log(center);
-        }
-        aaa();
-    }, [props]);
-    
+            if(stop){
+                console.log('정지');
+                clearInterval(timerId.current);
+                setStop(false);
+            }
+        }, [timer, stop]);
 
 
+    function startTimer (){
+        setTimer(true);
+    }
+    function stopTimer(){
+        clearInterval(timerId.current);
+        setTimer(false);
+        //setStop(true);
+        console.log(timerId.current);
+    }
 
    
     return(
-        render ? (<MapContainer style={{height:'80vh'}} center={center} zoom={17} scrollWheelZoom={true}>
+        <>
+       <MapContainer style={{height:'80vh'}} center={center} zoom={17} scrollWheelZoom={true}>
             <LayersControl position="topright">
             <LayersControl.BaseLayer checked name="OpenStreetMap.Mapnik">
             <TileLayer
@@ -67,8 +78,10 @@ function Map(props){
             </Marker>
             <Polyline pathOptions={limeOptions} positions={polyline} />
             
-            </MapContainer>)
-        : null
+            </MapContainer>
+            <button onClick={startTimer}>시작</button>
+            <button onClick={stopTimer}>정지</button>
+            </>
     );
 }
 
